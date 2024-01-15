@@ -5,12 +5,12 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DbConnection {
+public class DbConnectionManager {
 
-    private static DbConnection instance = null;
+    private static DbConnectionManager instance = null;
     private Connection conn = null;
 
-    private DbConnection() {}
+    private DbConnectionManager() {}
 
     private void init() throws SQLException {
         Properties properties = PropertyLoader.getInstance().getProperties();
@@ -28,9 +28,9 @@ public class DbConnection {
         return conn;
     }
 
-    public static DbConnection getInstance() throws SQLException {
+    public static DbConnectionManager getInstance() throws SQLException {
         if (instance == null || instance.getConnection().isClosed()) {
-            instance = new DbConnection();
+            instance = new DbConnectionManager();
             instance.init();
         }
         return instance;
