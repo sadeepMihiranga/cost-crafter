@@ -1,9 +1,9 @@
-package com.cost.crafter.dal.dao;
+package com.cost.crafter.dto;
 
 import lombok.Data;
 
 @Data
-public class ExpensesCategoryDao {
+public class ExpensesCategory {
 
     private Long id;
     private String name;

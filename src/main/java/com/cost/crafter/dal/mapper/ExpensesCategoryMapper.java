@@ -1,21 +1,21 @@
 package com.cost.crafter.dal.mapper;
 
 import com.cost.crafter.dal.BaseDAL;
-import com.cost.crafter.dal.dao.ExpensesCategoryDao;
+import com.cost.crafter.dto.ExpensesCategory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ExpensesCategoryMapper implements BaseDAL.RowMapper<ExpensesCategoryDao> {
+public class ExpensesCategoryMapper implements BaseDAL.RowMapper<ExpensesCategory> {
 
     @Override
-    public ExpensesCategoryDao mapRow(ResultSet resultSet) throws SQLException {
+    public ExpensesCategory mapRow(ResultSet resultSet) throws SQLException {
 
-        ExpensesCategoryDao expensesCategoryDao = new ExpensesCategoryDao();
-        expensesCategoryDao.setId(resultSet.getLong("category_id"));
-        expensesCategoryDao.setName(resultSet.getString("name"));
-        expensesCategoryDao.setDescription(resultSet.getString("description"));
+        ExpensesCategory expensesCategory = new ExpensesCategory();
+        expensesCategory.setId(resultSet.getLong("category_id"));
+        expensesCategory.setName(resultSet.getString("name"));
+        expensesCategory.setDescription(resultSet.getString("description"));
 
-        return expensesCategoryDao;
+        return expensesCategory;
     }
 }
