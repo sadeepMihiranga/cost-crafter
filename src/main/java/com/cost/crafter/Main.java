@@ -18,11 +18,11 @@ public class Main {
             DbConnectionManager connection = DbConnectionManager.getInstance();
             BaseDAL baseDAL = new BaseDAL(connection);
 
-            String insertQuery = "INSERT INTO transaction_categories (name, description) VALUES (?, ?)";
+            String insertQuery = "INSERT INTO expenses_categories (name, description) VALUES (?, ?)";
             Object[] values = {"Fuel_"+ UUID.randomUUID(), "Description"};
             baseDAL.create(insertQuery, values);
 
-            String readQuery = "SELECT category_id, name, description FROM transaction_categories";
+            String readQuery = "SELECT category_id, name, description FROM expenses_categories";
             List<ExpensesCategoryDao> expensesCategoryDaoList = baseDAL.read(readQuery, new ExpensesCategoryMapper(), null);
 
             System.out.println(expensesCategoryDaoList.size());
