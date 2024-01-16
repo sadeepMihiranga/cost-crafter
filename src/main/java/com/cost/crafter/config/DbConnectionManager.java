@@ -21,14 +21,14 @@ public class DbConnectionManager {
 
         conn = DriverManager.getConnection(url, username, password);
 
-        System.out.println("Connected to database");
+        // System.out.println("Connected to database");
     }
 
     public Connection getConnection() {
         return conn;
     }
 
-    public static DbConnectionManager getInstance() throws SQLException {
+    public synchronized static DbConnectionManager getInstance() throws SQLException {
         if (instance == null || instance.getConnection().isClosed()) {
             instance = new DbConnectionManager();
             instance.init();

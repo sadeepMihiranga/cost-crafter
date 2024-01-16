@@ -26,7 +26,7 @@ public class PropertyLoader {
         return properties;
     }
 
-    public static PropertyLoader getInstance() throws SQLException {
+    public synchronized static PropertyLoader getInstance() throws SQLException {
         if (propertyLoader == null) {
             propertyLoader = new PropertyLoader();
             propertyLoader.load();

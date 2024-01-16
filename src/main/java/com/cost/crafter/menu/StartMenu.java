@@ -11,7 +11,8 @@ public class StartMenu {
 
     public void showStartMenu() {
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
             System.out.println("\nCost Crafter\n");
             int selectedOption;
             do {
@@ -42,27 +43,44 @@ public class StartMenu {
 
     private void showRegisterUserMenu() {
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
             User user = new User();
             System.out.println("\nUser Registration\n");
             System.out.println("-------------------------------------\n");
+
             System.out.print("Enter username = ");
             user.setUsername(br.readLine());
+
             System.out.print("Enter password = ");
             user.setPassword(br.readLine());
+
+            System.out.print("First name = ");
+            user.setFirstName(br.readLine());
+
+            System.out.print("Last name = ");
+            user.setLastName(br.readLine());
+
+            System.out.print("Email = ");
+            user.setEmail(br.readLine());
+
+            System.out.print("Date of birth = ");
+            user.setDateOfBirth(br.readLine());
 
             UserService userService = new UserService();
             userService.registerUser(user);
 
             System.out.println("\nUser registered successfully !\n");
         } catch (Exception exception) {
-            exception.printStackTrace();
+            System.out.println("\nError while registering user");
+            showRegisterUserMenu();
         }
     }
 
     private void showLogin() {
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
             System.out.println("\nLogin Page\n");
             System.out.println("-------------------------------------\n");
             System.out.print("Enter username = ");
@@ -86,7 +104,8 @@ public class StartMenu {
 
     private void handleInvalidLogin() {
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
             int selectedOption;
             do {
                 System.out.println("\nInvalid Login Credentials\n");
