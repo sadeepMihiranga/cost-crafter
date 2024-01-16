@@ -72,6 +72,34 @@ public class BaseDAL {
         return result;
     }
 
+    public <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) {
+
+        try {
+            Connection connection = connectionManager.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(selectQuery);
+
+            // Set parameters
+            if (parameters != null) {
+                for (int i = 0; i < parameters.length; i++) {
+                    preparedStatement.setObject(i + 1, parameters[i]);
+                }
+            }
+
+            // Execute the query
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                // Map the result set to objects using the provided RowMapper
+                while (resultSet.next()) {
+                    return (rowMapper.mapRow(resultSet));
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     // Update operation
     public boolean update(String updateQuery, Object... parameters) {
         return create(updateQuery, parameters);
