@@ -4,14 +4,12 @@ import com.cost.crafter.config.DbConnectionManager;
 import com.cost.crafter.dal.BaseDAL;
 import com.cost.crafter.dal.mapper.UserMapper;
 import com.cost.crafter.dto.User;
-import com.cost.crafter.enums.MethodResponseState;
 import com.cost.crafter.security.BCrypt;
 import com.cost.crafter.util.CommonValidatorUtil;
 import com.cost.crafter.util.DateTimeUtil;
 import com.mysql.cj.util.StringUtils;
 
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 
 import static com.cost.crafter.util.FontColors.ANSI_RED;
 import static com.cost.crafter.util.FontColors.ANSI_RESET;
@@ -49,6 +47,7 @@ public class UserService {
         // save user info
         DbConnectionManager connection = null;
         BaseDAL baseDAL = null;
+        ExpensesCategoryService expensesCategoryService = null;
         try {
             connection = DbConnectionManager.getInstance();
             baseDAL = new BaseDAL(connection);
@@ -57,7 +56,14 @@ public class UserService {
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
             Object[] values = {user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
                     user.getEmail(), user.getDateOfBirth(), null};
-            baseDAL.create(insertQuery, values);
+            int createdId = baseDAL.create(insertQuery, values);
+
+            // transfer and assign default expenses categories to new user
+            if (createdId > 1) {
+                expensesCategoryService = new ExpensesCategoryService();
+                expensesCategoryService.transferCategories(createdId);
+            }
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +79,7 @@ public class UserService {
             connection = DbConnectionManager.getInstance();
             baseDAL = new BaseDAL(connection);
 
-            String readQuery = "SELECT * FROM user WHERE user_name = ?";
+            final String readQuery = "SELECT * FROM user WHERE user_name = ?";
 
             Object[] values = {username};
             User user = baseDAL.readOne(readQuery, new UserMapper(), values);

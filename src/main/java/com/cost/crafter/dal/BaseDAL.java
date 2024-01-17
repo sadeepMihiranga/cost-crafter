@@ -19,7 +19,8 @@ public class BaseDAL {
     }
 
     // Create operation
-    public boolean create(String insertQuery, Object... parameters) throws Exception {
+    public int create(String insertQuery, Object... parameters) throws Exception {
+        int createdId = 0;
         try {
             Connection connection = connectionManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
@@ -30,11 +31,15 @@ public class BaseDAL {
             }
 
             // Execute the query
-            int rowsAffected = preparedStatement.executeUpdate();
+            preparedStatement.executeUpdate();
 
-            // Return true if at least one row was affected
-            return rowsAffected > 0;
-
+            // Return created primary id
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if(rs.next())
+            {
+                createdId = rs.getInt(1);
+            }
+            return createdId;
         } catch (SQLException e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -102,12 +107,12 @@ public class BaseDAL {
     }
 
     // Update operation
-    public boolean update(String updateQuery, Object... parameters) throws Exception {
+    public int update(String updateQuery, Object... parameters) throws Exception {
         return create(updateQuery, parameters);
     }
 
     // Delete operation
-    public boolean delete(String deleteQuery, Object... parameters) throws Exception {
+    public int delete(String deleteQuery, Object... parameters) throws Exception {
         return create(deleteQuery, parameters);
     }
 
