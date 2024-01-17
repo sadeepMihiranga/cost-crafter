@@ -14,6 +14,7 @@ public class UserMapper implements BaseDAL.RowMapper<User>{
         User user = new User();
         user.setUserId(resultSet.getInt("user_id"));
         user.setUsername(resultSet.getString("user_name"));
+        user.setPassword(resultSet.getString("password"));
         user.setFirstName(resultSet.getString("first_name"));
         user.setLastName(resultSet.getString("last_name"));
         user.setEmail(resultSet.getString("email"));

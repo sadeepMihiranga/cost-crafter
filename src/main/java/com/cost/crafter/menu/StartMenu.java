@@ -4,8 +4,9 @@ import com.cost.crafter.dto.User;
 import com.cost.crafter.service.UserService;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+
+import static com.cost.crafter.util.FontColors.*;
 
 public class StartMenu {
 
@@ -42,37 +43,36 @@ public class StartMenu {
     }
 
     private void showRegisterUserMenu() {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             User user = new User();
             System.out.println("\nUser Registration\n");
             System.out.println("-------------------------------------\n");
 
-            System.out.print("Enter username = ");
+            System.out.print("Enter username : ");
             user.setUsername(br.readLine());
 
-            System.out.print("Enter password = ");
+            System.out.print("Enter password : ");
             user.setPassword(br.readLine());
 
-            System.out.print("First name = ");
+            System.out.print("First name : ");
             user.setFirstName(br.readLine());
 
-            System.out.print("Last name = ");
+            System.out.print("Last name : ");
             user.setLastName(br.readLine());
 
-            System.out.print("Email = ");
+            System.out.print("Email : ");
             user.setEmail(br.readLine());
 
-            System.out.print("Date of birth = ");
+            System.out.print("Date of birth : ");
             user.setDateOfBirth(br.readLine());
 
             UserService userService = new UserService();
-            userService.registerUser(user);
-
-            System.out.println("\nUser registered successfully !\n");
+            if (userService.registerUser(user)) {
+                System.out.println(ANSI_GREEN + "\nUser registered successfully !\n" + ANSI_RESET);
+            }
         } catch (Exception exception) {
-            System.out.println("\nError while registering user");
+            System.out.println(ANSI_RED + "\nError while registering user" + ANSI_RESET);
             showRegisterUserMenu();
         }
     }
@@ -83,9 +83,9 @@ public class StartMenu {
         try {
             System.out.println("\nLogin Page\n");
             System.out.println("-------------------------------------\n");
-            System.out.print("Enter username = ");
+            System.out.print("Enter username : ");
             String username = br.readLine();
-            System.out.print("Enter password = ");
+            System.out.print("Enter password : ");
             String password = br.readLine();
 
             UserService userService = new UserService();
@@ -108,7 +108,7 @@ public class StartMenu {
         try {
             int selectedOption;
             do {
-                System.out.println("\nInvalid Login Credentials\n");
+                System.out.println(ANSI_RED + "\nInvalid Login Credentials\n" + ANSI_RESET);
                 System.out.println("-------------------------------------\n");
 
                 System.out.println("-------------------------------------\n");

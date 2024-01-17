@@ -19,8 +19,7 @@ public class BaseDAL {
     }
 
     // Create operation
-    public boolean create(String insertQuery, Object... parameters) {
-
+    public boolean create(String insertQuery, Object... parameters) throws Exception {
         try {
             Connection connection = connectionManager.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
@@ -38,12 +37,12 @@ public class BaseDAL {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            throw new Exception(e.getMessage());
         }
     }
 
     // Read operation
-    public <T> List<T> read(String selectQuery, RowMapper<T> rowMapper, Object... parameters) {
+    public <T> List<T> read(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
         List<T> result = new ArrayList<>();
 
         try {
@@ -67,12 +66,13 @@ public class BaseDAL {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
 
         return result;
     }
 
-    public <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) {
+    public <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
 
         try {
             Connection connection = connectionManager.getConnection();
@@ -95,18 +95,19 @@ public class BaseDAL {
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
 
         return null;
     }
 
     // Update operation
-    public boolean update(String updateQuery, Object... parameters) {
+    public boolean update(String updateQuery, Object... parameters) throws Exception {
         return create(updateQuery, parameters);
     }
 
     // Delete operation
-    public boolean delete(String deleteQuery, Object... parameters) {
+    public boolean delete(String deleteQuery, Object... parameters) throws Exception {
         return create(deleteQuery, parameters);
     }
 
