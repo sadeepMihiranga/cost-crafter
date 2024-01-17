@@ -8,14 +8,14 @@ import java.io.InputStreamReader;
 
 import static com.cost.crafter.util.FontColors.*;
 
-public class StartMenu {
+public class StartMenu extends BaseMenuHandler {
 
     public void showStartMenu() {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.println("\nCost Crafter\n");
-            int selectedOption;
+            int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");
                 System.out.println("1 - Register");
@@ -24,13 +24,7 @@ public class StartMenu {
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                try {
-                    selectedOption = Integer.parseInt(br.readLine());
-                } catch (NumberFormatException ex) {
-                    selectedOption = 4;
-                }
-
-                switch (selectedOption) {
+                switch (checkSelectedOption(br, 4)) {
                     case 1 -> showRegisterUserMenu();
                     case 2 -> showLogin();
                     case 3 -> exit();
@@ -106,7 +100,7 @@ public class StartMenu {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            int selectedOption;
+            int selectedOption = 0;
             do {
                 System.out.println(ANSI_RED + "\nInvalid Login Credentials\n" + ANSI_RESET);
                 System.out.println("-------------------------------------\n");
@@ -118,13 +112,7 @@ public class StartMenu {
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                try {
-                    selectedOption = Integer.parseInt(br.readLine());
-                } catch (NumberFormatException ex) {
-                    selectedOption = 4;
-                }
-
-                switch (selectedOption) {
+                switch (checkSelectedOption(br, 4)) {
                     case 1 -> showLogin();
                     case 2 -> showStartMenu();
                     case 3 -> exit();
@@ -139,10 +127,5 @@ public class StartMenu {
 
     private void showMainMenu() {
 
-    }
-
-    private void exit() {
-        System.out.println("Thank you !");
-        System.exit(0);
     }
 }
