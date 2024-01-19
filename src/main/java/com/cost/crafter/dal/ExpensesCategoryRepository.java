@@ -7,18 +7,16 @@ import com.cost.crafter.dto.ExpensesCategory;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ExpensesCategoryRepository {
+public class ExpensesCategoryRepository extends BaseRepository {
+
+    public ExpensesCategoryRepository() throws SQLException {
+        super(DbConnectionManager.getInstance());
+    }
 
     public List<ExpensesCategory> fetchDefaultExpensesCategories() throws Exception {
-        DbConnectionManager connection = null;
-        BaseRepository baseRepository = null;
         try {
-            connection = DbConnectionManager.getInstance();
-            baseRepository = new BaseRepository(connection);
-
             final String readQuery = "SELECT * FROM expenses_categories";
-
-            List<ExpensesCategory> expensesCategoryList = baseRepository.read(readQuery, new ExpensesCategoryMapper(),
+            List<ExpensesCategory> expensesCategoryList = read(readQuery, new ExpensesCategoryMapper(),
                     null);
             return expensesCategoryList;
         } catch (SQLException e) {

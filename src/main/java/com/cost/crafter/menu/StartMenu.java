@@ -24,11 +24,11 @@ public class StartMenu extends BaseMenuHandler {
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                switch (checkSelectedOption(br, 4)) {
+                switch (intSelectedOption(br, 4)) {
                     case 1 -> showRegisterUserMenu();
                     case 2 -> showLogin();
                     case 3 -> exit();
-                    default -> System.out.println("Invalid option ! Please try again.");
+                    default -> showErrorMessage("Invalid option ! Please try again.");
                 }
             } while (selectedOption != 3);
         } catch (Exception exception) {
@@ -67,7 +67,7 @@ public class StartMenu extends BaseMenuHandler {
                 System.out.println(ANSI_GREEN + "\nUser registered successfully !\n" + ANSI_RESET);
             }
         } catch (Exception exception) {
-            System.out.println(ANSI_RED + "\nError while registering user" + ANSI_RESET);
+            showErrorMessage("\nError while registering user");
             showRegisterUserMenu();
         } finally {
             userService = null;
@@ -97,6 +97,7 @@ public class StartMenu extends BaseMenuHandler {
             }
         } catch (Exception exception) {
             exception.printStackTrace();
+            showErrorMessage("\nError while login user");
         } finally {
             mainMenu = null;
         }
@@ -117,11 +118,11 @@ public class StartMenu extends BaseMenuHandler {
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                switch (checkSelectedOption(br, 4)) {
+                switch (intSelectedOption(br, 4)) {
                     case 1 -> showLogin();
                     case 2 -> showStartMenu();
                     case 3 -> exit();
-                    default -> System.out.println("Invalid option ! Please try again.");
+                    default -> showErrorMessage("Invalid option ! Please try again.");
                 }
             } while (selectedOption != 3);
 

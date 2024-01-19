@@ -13,4 +13,9 @@ public class CommonValidatorUtil {
     public static boolean isAlpha(String text) {
         return text.chars().allMatch(Character::isLetter);
     }
+
+    public static boolean isBudgetMonthValid(String month) {
+        final String regexPattern = "^\\d{4}-\\d{2}$";
+        return Pattern.compile(regexPattern).matcher(month).matches();
+    }
 }

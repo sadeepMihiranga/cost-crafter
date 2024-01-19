@@ -21,14 +21,14 @@ public class MainMenu extends BaseMenuHandler {
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                switch (checkSelectedOption(br, 6)) {
+                switch (intSelectedOption(br, 6)) {
                     case 1 -> showManageExpensesCategoriesMenu();
                     case 2 -> showManageBudgetsMenu();
                     case 3 -> showManageIncomesMenu();
                     case 4 -> showManageExpensesMenu();
                     case 5 -> logout();
                     case 6 -> exit();
-                    default -> System.out.println("Invalid option ! Please try again.");
+                    default -> showErrorMessage("Invalid option ! Please try again.");
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
