@@ -16,7 +16,7 @@ public class BaseRepository {
     }
 
     // Create operation
-    public int create(String insertQuery, Object... parameters) throws Exception {
+    protected int create(String insertQuery, Object... parameters) throws Exception {
         int createdId = 0;
         try {
             Connection connection = connectionManager.getConnection();
@@ -45,7 +45,7 @@ public class BaseRepository {
     }
 
     // Read operation
-    public <T> List<T> read(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
+    protected <T> List<T> read(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
         List<T> result = new ArrayList<>();
 
         try {
@@ -75,7 +75,7 @@ public class BaseRepository {
         return result;
     }
 
-    public <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
+    protected <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
 
         try {
             Connection connection = connectionManager.getConnection();
@@ -105,12 +105,12 @@ public class BaseRepository {
     }
 
     // Update operation
-    public int update(String updateQuery, Object... parameters) throws Exception {
+    protected int update(String updateQuery, Object... parameters) throws Exception {
         return create(updateQuery, parameters);
     }
 
     // Delete operation
-    public int delete(String deleteQuery, Object... parameters) throws Exception {
+    protected int delete(String deleteQuery, Object... parameters) throws Exception {
         return create(deleteQuery, parameters);
     }
 

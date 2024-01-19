@@ -38,6 +38,7 @@ public class StartMenu extends BaseMenuHandler {
 
     private void showRegisterUserMenu() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        UserService userService = null;
         try {
             User user = new User();
             System.out.println("\nUser Registration\n");
@@ -61,19 +62,21 @@ public class StartMenu extends BaseMenuHandler {
             System.out.print("Date of birth : ");
             user.setDateOfBirth(br.readLine());
 
-            UserService userService = new UserService();
+            userService = new UserService();
             if (userService.registerUser(user)) {
                 System.out.println(ANSI_GREEN + "\nUser registered successfully !\n" + ANSI_RESET);
             }
         } catch (Exception exception) {
             System.out.println(ANSI_RED + "\nError while registering user" + ANSI_RESET);
             showRegisterUserMenu();
+        } finally {
+            userService = null;
         }
     }
 
     private void showLogin() {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        MainMenu mainMenu = null;
         try {
             System.out.println("\nLogin Page\n");
             System.out.println("-------------------------------------\n");
@@ -88,16 +91,18 @@ public class StartMenu extends BaseMenuHandler {
             if (user == null) {
                 handleInvalidLogin();
             } else {
-                MainMenu mainMenu = new MainMenu();
+                setLoggedUser(user);
+                mainMenu = new MainMenu();
                 mainMenu.showMainMenu();
             }
         } catch (Exception exception) {
             exception.printStackTrace();
+        } finally {
+            mainMenu = null;
         }
     }
 
     private void handleInvalidLogin() {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             int selectedOption = 0;
@@ -123,9 +128,5 @@ public class StartMenu extends BaseMenuHandler {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-    }
-
-    private void showMainMenu() {
-
     }
 }
