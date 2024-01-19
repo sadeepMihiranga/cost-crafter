@@ -6,7 +6,7 @@ import com.cost.crafter.dto.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserMapper implements BaseRepository.RowMapper<User>{
+public class UserMapper implements BaseRepository.RowMapper<User> {
 
     @Override
     public User mapRow(ResultSet resultSet) throws SQLException {

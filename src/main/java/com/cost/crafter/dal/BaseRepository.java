@@ -75,6 +75,9 @@ public class BaseRepository {
         return result;
     }
 
+    /**
+     * @return Data entity if matching record found, if not return null
+     * */
     protected <T> T readOne(String selectQuery, RowMapper<T> rowMapper, Object... parameters) throws Exception {
 
         try {

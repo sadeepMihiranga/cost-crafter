@@ -4,6 +4,8 @@ import com.cost.crafter.dal.UserBudgetRepository;
 import com.cost.crafter.dto.UserBudget;
 import com.mysql.cj.util.StringUtils;
 
+import java.util.List;
+
 import static com.cost.crafter.util.FontColors.ANSI_RED;
 import static com.cost.crafter.util.FontColors.ANSI_RESET;
 
@@ -29,5 +31,16 @@ public class UserBudgetService {
         userBudgetRepository = new UserBudgetRepository();
         userBudgetRepository.insertUserBudget(new UserBudget(userId, expensesCategoryId, month, amount));
         return true;
+    }
+
+    public UserBudget checkForDuplicateBudgetEntry(Integer userId, String month, Integer expensesCategoryId)
+            throws Exception {
+        userBudgetRepository = new UserBudgetRepository();
+        return userBudgetRepository.fetchDuplicateBudgetEntry(userId, month, expensesCategoryId);
+    }
+
+    public List<UserBudget> fetchUserBudgetEntries(Integer userId) throws Exception {
+        userBudgetRepository = new UserBudgetRepository();
+        return userBudgetRepository.fetchUserBudgetEntries(userId);
     }
 }
