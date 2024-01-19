@@ -1,5 +1,6 @@
 package com.cost.crafter.menu;
 
+import com.cost.crafter.dto.UserBudget;
 import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.service.UserBudgetService;
 import com.cost.crafter.service.UserExpensesCategoryService;
@@ -24,20 +25,18 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
             int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");
-                System.out.println("1 - View budget allocations");
+                System.out.println("1 - View/Update budget allocations");
                 System.out.println("2 - Allocate budget");
-                System.out.println("3 - Update budget allocations");
-                System.out.println("4 - Main menu");
-                System.out.println("5 - Exit");
+                System.out.println("3 - Main menu");
+                System.out.println("4 - Exit");
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
-                switch (intSelectedOption(br, 6)) {
-                    case 1 -> showBudgetAllocation();
+                switch (intSelectedOption(br, 5)) {
+                    case 1 -> showBudgetAllocations();
                     case 2 -> showAllocateBudgetMenu();
-                    case 3 -> updateBudgetAllocation();
-                    case 4 -> goToMainMenu();
-                    case 5 -> exit();
+                    case 3 -> goToMainMenu();
+                    case 4 -> exit();
                     default -> showErrorMessage("Invalid option ! Please try again.");
                 }
             } while (selectedOption != 5);
@@ -60,7 +59,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
             int selectedOption = 0;
             int exitOptionId = 0;
 
-            asciiTable = initTable("Category Id", "Name", "Description");
+            asciiTable = initTable("Expense Category Id", "Name", "Description");
             for (UserExpensesCategory category : userExpensesCategories) {
                 addTableRow(asciiTable, category.getExpensesCategoryId(), category.getName(), category.getDescription());
 
@@ -109,7 +108,6 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
 
     private void allocateBudget(Integer expensesCategoryId) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         try {
             System.out.println("\nEnter a month to allocate the budget. Ex: 2024-02");
             System.out.print(": ");
@@ -122,22 +120,27 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
 
             // TODO : only future month validation
 
-            // TODO : only one budget for one month validation
+            userBudgetService = new UserBudgetService();
+            UserBudget userBudget = userBudgetService.checkForDuplicateBudgetEntry(loggedUser().getUserId(), month,
+                    expensesCategoryId);
+            if (userBudget != null) {
+                showErrorMessage(String.format("\nSelected expense category and month %s has already allocated budget", month));
+                allocateBudget(expensesCategoryId);
+            }
 
             System.out.println("\nEnter budget amount : ");
             final double amount = doubleSelectedOption(br, -1);
-
             if (amount < 0) {
                 showErrorMessage("Invalid amount ! Please try again.");
                 allocateBudget(expensesCategoryId);
             }
 
-            userBudgetService = new UserBudgetService();
-            boolean isAllocated = userBudgetService.allocateBudget(loggedUser().getUserId(), expensesCategoryId, month, amount);
-
+            final boolean isAllocated = userBudgetService.allocateBudget(loggedUser().getUserId(), expensesCategoryId,
+                    month, amount);
             if (!isAllocated) {
                 allocateBudget(expensesCategoryId);
             }
+
             System.out.println("Budget allocated successfully");
             showManageBudgetsMenu();
         } catch (Exception e) {
@@ -148,9 +151,68 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
         }
     }
 
-    private void showBudgetAllocation() {
+    private void showBudgetAllocations() {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        AsciiTable asciiTable = null;
+        List<Integer> expenseCategoryIdList = null;
+        try {
+            System.out.println("\nBudget Allocations\n");
+            int selectedOption = 0;
+            int maxCategoryId = 0;
+            int exitOptionId = 0;
+            expenseCategoryIdList = new ArrayList<>();
+
+            userBudgetService = new UserBudgetService();
+            List<UserBudget> userBudgets = userBudgetService.fetchUserBudgetEntries(loggedUser().getUserId());
+
+            asciiTable = initTable("Budget Id", "Expense Category Id", "Month", "Amount");
+            for (UserBudget userBudget : userBudgets) {
+                addTableRow(asciiTable, userBudget.getUserBudgetId(), userBudget.getExpenseCategoryId(),
+                        userBudget.getMonth(), userBudget.getBudgetAmount());
+
+                if (maxCategoryId < userBudget.getExpenseCategoryId()) {
+                    maxCategoryId = userBudget.getExpenseCategoryId();
+                }
+                expenseCategoryIdList.add(userBudget.getExpenseCategoryId());
+            }
+            final String renderedTable = asciiTable.render();
+
+            do {
+                System.out.println("To update choose a budget expense category by id,\n");
+                System.out.println(renderedTable);
+                System.out.println("\nOr choose a menu option");
+
+                final int mainMenuOptionId = maxCategoryId + 1;
+                exitOptionId = maxCategoryId + 2;
+
+                System.out.println("-------------------------------------\n");
+                System.out.println(String.format("%s - Main menu", mainMenuOptionId));
+                System.out.println(String.format("%s - Exit", exitOptionId));
+                System.out.println("\n-------------------------------------\n");
+                System.out.print("Select an option : ");
+                selectedOption = intSelectedOption(br, exitOptionId+1);
+
+                if (expenseCategoryIdList.contains(selectedOption)) {
+                    updateBudgetAllocation(selectedOption);
+                } else if (selectedOption == mainMenuOptionId) {
+                    goToMainMenu();
+                } else if (selectedOption == exitOptionId) {
+                    exit();
+                } else {
+                    showErrorMessage("Invalid option ! Please try again.");
+                }
+            } while (selectedOption != exitOptionId);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            asciiTable = null;
+            expenseCategoryIdList = null;
+            userBudgetService = null;
+        }
     }
 
-    private void updateBudgetAllocation() {
+    private void updateBudgetAllocation(Integer userBudgetId) {
+
+
     }
 }

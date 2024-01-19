@@ -1,8 +1,10 @@
 package com.cost.crafter.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class UserBudget {
 
     private Integer userBudgetId;
