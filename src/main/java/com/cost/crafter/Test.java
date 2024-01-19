@@ -1,7 +1,7 @@
 package com.cost.crafter;
 
 import com.cost.crafter.config.DbConnectionManager;
-import com.cost.crafter.dal.BaseDAL;
+import com.cost.crafter.dal.BaseRepository;
 import com.cost.crafter.dto.ExpensesCategory;
 import com.cost.crafter.dal.mapper.ExpensesCategoryMapper;
 
@@ -14,14 +14,14 @@ public class Test {
     public static void main(String[] args) {
         try {
             DbConnectionManager connection = DbConnectionManager.getInstance();
-            BaseDAL baseDAL = new BaseDAL(connection);
+            BaseRepository baseRepository = new BaseRepository(connection);
 
             String insertQuery = "INSERT INTO transaction_categories (name, description) VALUES (?, ?)";
             Object[] values = {"Fuel_"+ UUID.randomUUID(), "Description"};
-            baseDAL.create(insertQuery, values);
+            baseRepository.create(insertQuery, values);
 
             String readQuery = "SELECT category_id, name, description FROM transaction_categories";
-            List<ExpensesCategory> expensesCategoryList = baseDAL.read(readQuery, new ExpensesCategoryMapper(), (Object) null);
+            List<ExpensesCategory> expensesCategoryList = baseRepository.read(readQuery, new ExpensesCategoryMapper(), (Object) null);
 
             System.out.println(expensesCategoryList.size());
 

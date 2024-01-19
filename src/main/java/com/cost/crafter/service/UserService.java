@@ -1,26 +1,26 @@
 package com.cost.crafter.service;
 
-import com.cost.crafter.config.DbConnectionManager;
-import com.cost.crafter.dal.BaseDAL;
-import com.cost.crafter.dal.mapper.UserMapper;
+import com.cost.crafter.dal.UserRepository;
 import com.cost.crafter.dto.User;
 import com.cost.crafter.security.BCrypt;
 import com.cost.crafter.util.CommonValidatorUtil;
 import com.cost.crafter.util.DateTimeUtil;
 import com.mysql.cj.util.StringUtils;
 
-import java.sql.SQLException;
-
 import static com.cost.crafter.util.FontColors.ANSI_RED;
 import static com.cost.crafter.util.FontColors.ANSI_RESET;
 
 public class UserService {
 
+    private UserExpensesCategoryService userExpensesCategoryService = null;
+
+    private UserRepository userRepository = null;
+
     public boolean registerUser (User user) throws Exception {
 
         System.out.println("\nRegistering...");
 
-        // input validation
+        // input validations
         if (!DateTimeUtil.isValid(user.getDateOfBirth(), "yyyy-MM-dd")) {
             System.out.println(ANSI_RED + "\nDate of birth should be in yyyy-MM-dd format" + ANSI_RESET);
             return false;
@@ -44,46 +44,32 @@ public class UserService {
         final String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
         user.setPassword(hashedPassword);
 
-        // save user info
-        DbConnectionManager connection = null;
-        BaseDAL baseDAL = null;
-        ExpensesCategoryService expensesCategoryService = null;
+        UserRepository userRepository = null;
         try {
-            connection = DbConnectionManager.getInstance();
-            baseDAL = new BaseDAL(connection);
-
-            final String insertQuery = "INSERT INTO user (user_name, password, first_name, last_name, email, date_of_birth, gender) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            Object[] values = {user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(),
-                    user.getEmail(), user.getDateOfBirth(), null};
-            int createdId = baseDAL.create(insertQuery, values);
+            // save user info
+            userRepository = new UserRepository();
+            int createdId = userRepository.insertUser(user);
 
             // transfer and assign default expenses categories to new user
             if (createdId > 1) {
-                expensesCategoryService = new ExpensesCategoryService();
-                expensesCategoryService.transferCategories(createdId);
+                userExpensesCategoryService = new UserExpensesCategoryService();
+                userExpensesCategoryService.syncDefaultCategories(createdId);
             }
 
             return true;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception(e.getMessage());
+            throw new Exception("Error while processing user registration");
+        } finally {
+            userExpensesCategoryService = null;
         }
     }
 
     public User login(String username, String password) throws Exception {
-
-        DbConnectionManager connection = null;
-        BaseDAL baseDAL = null;
         try {
-            connection = DbConnectionManager.getInstance();
-            baseDAL = new BaseDAL(connection);
-
-            final String readQuery = "SELECT * FROM user WHERE user_name = ?";
-
-            Object[] values = {username};
-            User user = baseDAL.readOne(readQuery, new UserMapper(), values);
-
+            // fetch user from database
+            userRepository = new UserRepository();
+            User user = userRepository.login(username);
             if (user == null) {
                 return null;
             }
@@ -91,13 +77,11 @@ public class UserService {
                 return null;
             }
             return user;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new Exception("Error while executing SQL");
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error while processing login");
+        } finally {
+            userRepository = null;
         }
     }
 }
