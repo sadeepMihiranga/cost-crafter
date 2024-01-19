@@ -1,12 +1,12 @@
 package com.cost.crafter.dal.mapper;
 
-import com.cost.crafter.dal.BaseDAL;
+import com.cost.crafter.dal.BaseRepository;
 import com.cost.crafter.dto.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserMapper implements BaseDAL.RowMapper<User>{
+public class UserMapper implements BaseRepository.RowMapper<User>{
 
     @Override
     public User mapRow(ResultSet resultSet) throws SQLException {

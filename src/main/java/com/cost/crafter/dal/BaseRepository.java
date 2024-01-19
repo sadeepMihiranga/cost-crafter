@@ -2,19 +2,16 @@ package com.cost.crafter.dal;
 
 import com.cost.crafter.config.DbConnectionManager;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BaseDAL {
+public class BaseRepository {
 
     // Connection provider class for managing database connections
     private DbConnectionManager connectionManager;
 
-    public BaseDAL(DbConnectionManager connectionProvider) {
+    public BaseRepository(DbConnectionManager connectionProvider) {
         this.connectionManager = connectionProvider;
     }
 
@@ -23,7 +20,8 @@ public class BaseDAL {
         int createdId = 0;
         try {
             Connection connection = connectionManager.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery,
+                    Statement.RETURN_GENERATED_KEYS);
 
             // Set parameters
             for (int i = 0; i < parameters.length; i++) {
