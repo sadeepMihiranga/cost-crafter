@@ -14,7 +14,7 @@ public class UserExpensesCategoryService {
 
     public void syncDefaultCategories(Integer userId) throws Exception {
         if (userId == null) {
-            throw new Exception("Invalid user id");
+            throw new Exception("User id is required");
         }
         try {
             // fetch default expenses categories
@@ -42,5 +42,21 @@ public class UserExpensesCategoryService {
         } finally {
             userExpensesCategoryRepository = null;
         }
+    }
+
+    public List<UserExpensesCategory> fetchAllCategories(Integer userId) throws Exception {
+        if (userId == null) {
+            throw new Exception("User id is required");
+        }
+        try {
+            userExpensesCategoryRepository = new UserExpensesCategoryRepository();
+            return userExpensesCategoryRepository.fetchAllCategories(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while fetching user expenses categories");
+        } finally {
+            userExpensesCategoryRepository = null;
+        }
+
     }
 }
