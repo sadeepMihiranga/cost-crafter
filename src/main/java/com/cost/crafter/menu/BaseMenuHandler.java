@@ -73,6 +73,10 @@ public class BaseMenuHandler {
         System.out.println(ANSI_RED + message + ANSI_RESET);
     }
 
+    protected void showMenuHeader(String message) {
+        System.out.println(ANSI_BLUE + message + ANSI_RESET);
+    }
+
     protected void showSuccessMessage(String message) {
         System.out.println(ANSI_GREEN + message + ANSI_RESET);
     }

@@ -14,7 +14,7 @@ public class StartMenu extends BaseMenuHandler {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.println("\nCost Crafter\n");
+            showMenuHeader("\nCost Crafter\n");
             int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");
@@ -78,7 +78,7 @@ public class StartMenu extends BaseMenuHandler {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         MainMenu mainMenu = null;
         try {
-            System.out.println("\nLogin Page\n");
+            showMenuHeader("\nLogin Page\n");
             System.out.println("-------------------------------------\n");
             System.out.print("Enter username : ");
             String username = br.readLine();
