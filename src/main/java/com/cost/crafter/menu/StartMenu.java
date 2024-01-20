@@ -64,7 +64,7 @@ public class StartMenu extends BaseMenuHandler {
 
             userService = new UserService();
             if (userService.registerUser(user)) {
-                System.out.println(ANSI_GREEN + "\nUser registered successfully !\n" + ANSI_RESET);
+                showSuccessMessage("\nUser registered successfully !\n");
             }
         } catch (Exception exception) {
             showErrorMessage("\nError while registering user");

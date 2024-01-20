@@ -7,8 +7,7 @@ import de.vandermeer.skb.interfaces.transformers.textformat.TextAlignment;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static com.cost.crafter.util.FontColors.ANSI_RED;
-import static com.cost.crafter.util.FontColors.ANSI_RESET;
+import static com.cost.crafter.util.FontColors.*;
 
 public class BaseMenuHandler {
 
@@ -72,5 +71,9 @@ public class BaseMenuHandler {
 
     protected void showErrorMessage(String message) {
         System.out.println(ANSI_RED + message + ANSI_RESET);
+    }
+
+    protected void showSuccessMessage(String message) {
+        System.out.println(ANSI_GREEN + message + ANSI_RESET);
     }
 }

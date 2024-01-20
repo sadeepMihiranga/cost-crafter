@@ -141,7 +141,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 allocateBudget(expensesCategoryId);
             }
 
-            System.out.println("Budget allocated successfully");
+            showSuccessMessage("\nBudget allocated successfully");
             showManageBudgetsMenu();
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,13 +154,13 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
     private void showBudgetAllocations() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         AsciiTable asciiTable = null;
-        List<Integer> expenseCategoryIdList = null;
+        List<Integer> budgetIdList = null;
         try {
             System.out.println("\nBudget Allocations\n");
             int selectedOption = 0;
             int maxCategoryId = 0;
             int exitOptionId = 0;
-            expenseCategoryIdList = new ArrayList<>();
+            budgetIdList = new ArrayList<>();
 
             userBudgetService = new UserBudgetService();
             List<UserBudget> userBudgets = userBudgetService.fetchUserBudgetEntries(loggedUser().getUserId());
@@ -173,12 +173,12 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 if (maxCategoryId < userBudget.getExpenseCategoryId()) {
                     maxCategoryId = userBudget.getExpenseCategoryId();
                 }
-                expenseCategoryIdList.add(userBudget.getExpenseCategoryId());
+                budgetIdList.add(userBudget.getUserBudgetId());
             }
             final String renderedTable = asciiTable.render();
 
             do {
-                System.out.println("To update choose a budget expense category by id,\n");
+                System.out.println("To update choose a budget by id,\n");
                 System.out.println(renderedTable);
                 System.out.println("\nOr choose a menu option");
 
@@ -192,7 +192,10 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 System.out.print("Select an option : ");
                 selectedOption = intSelectedOption(br, exitOptionId+1);
 
-                if (expenseCategoryIdList.contains(selectedOption)) {
+                if (budgetIdList.contains(selectedOption)) {
+                    /*final int finalSelectedOption = selectedOption;
+                    UserBudget selectedUserBudget = userBudgets.stream().filter(userBudget -> userBudget
+                            .getUserBudgetId().equals(finalSelectedOption)).findAny().orElse(null);*/
                     updateBudgetAllocation(selectedOption);
                 } else if (selectedOption == mainMenuOptionId) {
                     goToMainMenu();
@@ -206,13 +209,61 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
             exception.printStackTrace();
         } finally {
             asciiTable = null;
-            expenseCategoryIdList = null;
+            budgetIdList = null;
             userBudgetService = null;
         }
     }
 
     private void updateBudgetAllocation(Integer userBudgetId) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            System.out.println("\nUpdate Budget Allocation\n");
+            int selectedOption = 0;
 
+            userBudgetService = new UserBudgetService();
+            UserBudget budgetDetails = userBudgetService.getBudgetDetailsById(userBudgetId);
 
+            do {
+                System.out.println("Expense category id : " + budgetDetails.getExpenseCategoryId());
+                System.out.println("Expense category name : " + budgetDetails.getExpenseCategoryName());
+                System.out.println("Month : " + budgetDetails.getMonth());
+                System.out.println("Budget amount : " + budgetDetails.getBudgetAmount());
+
+                System.out.println("\nSelect an option :");
+
+                System.out.println("-------------------------------------\n");
+                System.out.println(String.format("%s - Update budget amount", 1));
+                System.out.println(String.format("%s - Main menu", 2));
+                System.out.println(String.format("%s - Exit", 3));
+                System.out.println("\n-------------------------------------\n");
+                System.out.print("Select an option : ");
+                selectedOption = intSelectedOption(br, 4);
+
+                if (selectedOption == 1) {
+                    System.out.print("\nEnter new budget amount to update : ");
+                    final double newAmount = doubleSelectedOption(br, -1);
+                    if (newAmount < 0) {
+                        showErrorMessage("Invalid amount ! Please try again.");
+                        updateBudgetAllocation(userBudgetId);
+                    }
+
+                    final boolean isUpdated = userBudgetService.updateBudgetAllocation(budgetDetails, newAmount);
+                    if (!isUpdated) {
+                        updateBudgetAllocation(userBudgetId);
+                    }
+                    showSuccessMessage("\nBudget allocation updated successfully\n");
+                } else if (selectedOption == 2) {
+                    goToMainMenu();
+                } else if (selectedOption == 3) {
+                    exit();
+                } else {
+                    showErrorMessage("Invalid option ! Please try again.");
+                }
+            } while (selectedOption != 3);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            userBudgetService = null;
+        }
     }
 }

@@ -13,6 +13,9 @@ public class UserBudget {
     private String month;
     private Double budgetAmount;
 
+    // not a data entity
+    private String expenseCategoryName;
+
     public UserBudget(Integer userId, Integer expenseCategoryId, String month, Double budgetAmount) {
         this.userId = userId;
         this.expenseCategoryId = expenseCategoryId;

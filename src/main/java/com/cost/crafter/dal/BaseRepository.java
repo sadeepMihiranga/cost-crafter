@@ -120,5 +120,18 @@ public class BaseRepository {
     // Functional interface for mapping rows from ResultSet to objects
     public interface RowMapper<T> {
         T mapRow(ResultSet resultSet) throws SQLException;
+
+        static boolean columnExists(ResultSet resultSet, String columnName) throws SQLException {
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            for (int i = 1; i <= columnCount; i++) {
+                if (metaData.getColumnName(i).equalsIgnoreCase(columnName)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

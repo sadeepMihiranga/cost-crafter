@@ -48,4 +48,31 @@ public class UserBudgetRepository extends BaseRepository {
             throw new Exception("Error while executing SQL");
         }
     }
+
+    public int updateBudgetAmount(UserBudget userBudget, Double newAmount) throws Exception {
+        try {
+            final String insertQuery = "UPDATE user_budget SET budget_amount = ? WHERE user_id = ? " +
+                    "AND expenses_category_id = ? AND month = ?";
+            Object[] values = {newAmount, userBudget.getUserId(), userBudget.getExpenseCategoryId(),
+                    userBudget.getMonth()};
+            return update(insertQuery, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while executing SQL");
+        }
+    }
+
+    public UserBudget fetchBudgetDetailsById(Integer budgetId) throws Exception {
+        try {
+            final String insertQuery = "SELECT ub.user_budget_id, ub.user_id, ub.expenses_category_id, ub.month, ub.budget_amount, uex.name " +
+                    "FROM user_budget ub \n" +
+                    "INNER JOIN user_expenses_categories uex ON ub.expenses_category_id = uex.expenses_category_id \n" +
+                    "WHERE user_budget_id = ?";
+            Object[] values = {budgetId};
+            return readOne(insertQuery, new UserBudgetMapper(), values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while executing SQL");
+        }
+    }
 }
