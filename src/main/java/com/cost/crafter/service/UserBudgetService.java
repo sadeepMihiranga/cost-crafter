@@ -43,4 +43,15 @@ public class UserBudgetService {
         userBudgetRepository = new UserBudgetRepository();
         return userBudgetRepository.fetchUserBudgetEntries(userId);
     }
+
+    public boolean updateBudgetAllocation(UserBudget userBudget, Double newAmount) throws Exception {
+        userBudgetRepository = new UserBudgetRepository();
+        userBudgetRepository.updateBudgetAmount(userBudget, newAmount);
+        return true;
+    }
+
+    public UserBudget getBudgetDetailsById(Integer budgetId) throws Exception {
+        userBudgetRepository = new UserBudgetRepository();
+        return userBudgetRepository.fetchBudgetDetailsById(budgetId);
+    }
 }
