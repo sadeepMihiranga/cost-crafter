@@ -59,4 +59,34 @@ public class UserExpensesCategoryService {
         }
 
     }
+
+    public UserExpensesCategory fetchUserExpensesCategory(UserExpensesCategory existingCategory) {
+        return existingCategory;
+    }
+
+    public void updateUserExpensesCategory(UserExpensesCategory existingCategory) throws Exception {
+        try {
+            userExpensesCategoryRepository = new UserExpensesCategoryRepository();
+            userExpensesCategoryRepository.updateUserExpensesCategory(existingCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while updating user expenses category");
+        } finally {
+            userExpensesCategoryRepository = null;
+        }
+    }
+
+
+    public void deleteUserExpensesCategory(UserExpensesCategory categoryToDelete) throws Exception {
+        try {
+            userExpensesCategoryRepository = new UserExpensesCategoryRepository();
+            userExpensesCategoryRepository.deleteUserExpensesCategory(categoryToDelete);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while deleting user expenses category");
+        } finally {
+            userExpensesCategoryRepository = null;
+        }
+    }
+
 }

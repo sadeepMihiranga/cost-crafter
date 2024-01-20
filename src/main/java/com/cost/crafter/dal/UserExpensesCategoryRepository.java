@@ -35,4 +35,29 @@ public class UserExpensesCategoryRepository extends BaseRepository {
             throw new Exception("Error while executing SQL");
         }
     }
+
+    public void deleteUserExpensesCategory(UserExpensesCategory categoryToDelete) throws Exception {
+        try {
+            final String deleteQuery = "DELETE FROM user_expenses_categories WHERE user_id = ? AND expenses_category_id = ?";
+            Object[] values = {categoryToDelete.getUserId(), categoryToDelete.getExpensesCategoryId()};
+            delete(deleteQuery, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while deleting user expenses category");
+        }
+    }
+
+    public void updateUserExpensesCategory(UserExpensesCategory existingCategory) throws Exception {
+        try {
+            final String updateQuery = "UPDATE user_expenses_categories SET name = ?, description = ? " +
+                    "WHERE user_id = ? AND expenses_category_id = ?";
+            Object[] values = {existingCategory.getName(), existingCategory.getDescription(),
+                    existingCategory.getUserId(), existingCategory.getExpensesCategoryId()};
+            update(updateQuery, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while updating user expenses category");
+        }
+    }
+
 }

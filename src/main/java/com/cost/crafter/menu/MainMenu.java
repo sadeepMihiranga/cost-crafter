@@ -1,5 +1,7 @@
 package com.cost.crafter.menu;
 
+import com.cost.crafter.dto.User;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -37,7 +39,8 @@ public class MainMenu extends BaseMenuHandler {
     }
     
     private void showManageExpensesCategoriesMenu() {
-        
+        ExpensesCategoriesMenu expensesCategoriesMenu = new ExpensesCategoriesMenu();
+        expensesCategoriesMenu.showManageExpensesCategoriesMenu();
     }
 
     private void showManageBudgetsMenu() {
