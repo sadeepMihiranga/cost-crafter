@@ -5,6 +5,7 @@ import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.service.UserExpensesCategoryService;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -47,11 +48,16 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.println("\nEnter details for the new expense category:");
+            System.out.println("---------------------------------------------");
 
             System.out.print("Enter category name: ");
             String name = br.readLine();
+            if (name.isEmpty()) {
+                showErrorMessage("Category name cannot be empty.");
+                return;
+            }
 
-            System.out.print("Enter category description: ");
+            System.out.print("Enter category description (Optional): ");
             String description = br.readLine();
 
             UserExpensesCategory newCategory = new UserExpensesCategory(loggedUser().getUserId(), name, description);
@@ -72,7 +78,13 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
             userExpensesCategoryService = new UserExpensesCategoryService();
             List<UserExpensesCategory> categories = userExpensesCategoryService.fetchAllCategories(loggedUser().getUserId());
 
+            if (categories.isEmpty()) {
+                System.out.println("No expense categories found.");
+                return;
+            }
+
             System.out.println("\nExpense Categories:\n");
+            System.out.println("---------------------------");
             for (UserExpensesCategory category : categories) {
                 System.out.println("Category ID: " + category.getExpensesCategoryId());
                 System.out.println("Name: " + category.getName());
@@ -88,8 +100,14 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
     private void updateExpenseCategory() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.print("Enter the ID of the category to update: ");
-            int categoryId = Integer.parseInt(br.readLine());
+            System.out.print("Enter the id of the category to update: ");
+            int categoryId;
+            try {
+                categoryId = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                showErrorMessage("Invalid category id. Please enter a valid number!");
+                return;
+            }
 
             UserExpensesCategory existingCategory = new UserExpensesCategory(loggedUser().getUserId(), "", "");
             existingCategory.setExpensesCategoryId(categoryId);
@@ -126,7 +144,13 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Enter the ID of the category to delete: ");
-            int categoryId = Integer.parseInt(br.readLine());
+            int categoryId;
+            try {
+                categoryId = Integer.parseInt(br.readLine());
+            } catch (NumberFormatException e) {
+                showErrorMessage("Invalid category ID. Please enter a valid number.");
+                return;
+            }
 
             UserExpensesCategory categoryToDelete = new UserExpensesCategory(loggedUser().getUserId(), "", "");
             categoryToDelete.setExpensesCategoryId(categoryId);

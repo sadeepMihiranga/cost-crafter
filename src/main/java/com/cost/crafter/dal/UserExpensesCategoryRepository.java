@@ -60,4 +60,16 @@ public class UserExpensesCategoryRepository extends BaseRepository {
         }
     }
 
+    public UserExpensesCategory fetchUserExpensesCategory(UserExpensesCategory existingCategory) throws Exception {
+        try {
+            final String selectQuery = "SELECT * FROM user_expenses_categories WHERE user_id = ? AND expenses_category_id = ?";
+            Object[] values = { existingCategory.getUserId(), existingCategory.getExpensesCategoryId() };
+
+            return readOne(selectQuery, new UserExpensesCategoryMapper(), values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while fetching user expenses category");
+        }
+    }
+
 }

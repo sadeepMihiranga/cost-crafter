@@ -61,7 +61,15 @@ public class UserExpensesCategoryService {
     }
 
     public UserExpensesCategory fetchUserExpensesCategory(UserExpensesCategory existingCategory) {
-        return existingCategory;
+        try {
+            userExpensesCategoryRepository = new UserExpensesCategoryRepository();
+            return userExpensesCategoryRepository.fetchUserExpensesCategory(existingCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            userExpensesCategoryRepository = null;
+        }
     }
 
     public void updateUserExpensesCategory(UserExpensesCategory existingCategory) throws Exception {
@@ -76,11 +84,17 @@ public class UserExpensesCategoryService {
         }
     }
 
-
     public void deleteUserExpensesCategory(UserExpensesCategory categoryToDelete) throws Exception {
         try {
-            userExpensesCategoryRepository = new UserExpensesCategoryRepository();
-            userExpensesCategoryRepository.deleteUserExpensesCategory(categoryToDelete);
+            // Check if the category exists before attempting to delete
+            UserExpensesCategory existingCategory = fetchUserExpensesCategory(categoryToDelete);
+
+            if (existingCategory != null) {
+                userExpensesCategoryRepository = new UserExpensesCategoryRepository();
+                userExpensesCategoryRepository.deleteUserExpensesCategory(categoryToDelete);
+            } else {
+                System.out.println("Category with ID " + categoryToDelete.getExpensesCategoryId() + " does not exist.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error while deleting user expenses category");
