@@ -8,7 +8,7 @@ public class MainMenu extends BaseMenuHandler {
     public void showMainMenu() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.println("\nMain Menu\n");
+            showMenuHeader("\nMain Menu\n");
             int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");

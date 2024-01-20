@@ -21,7 +21,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
     public void showManageBudgetsMenu() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.println("\nBudget Allocation Menu\n");
+            showMenuHeader("\nBudget Allocation Menu\n");
             int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");
@@ -156,7 +156,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
         AsciiTable asciiTable = null;
         List<Integer> budgetIdList = null;
         try {
-            System.out.println("\nBudget Allocations\n");
+            showMenuHeader("\nBudget Allocations\n");
             int selectedOption = 0;
             int maxCategoryId = 0;
             int exitOptionId = 0;
@@ -217,7 +217,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
     private void updateBudgetAllocation(Integer userBudgetId) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.println("\nUpdate Budget Allocation\n");
+            showMenuHeader("\nUpdate Budget Allocation\n");
             int selectedOption = 0;
 
             userBudgetService = new UserBudgetService();
