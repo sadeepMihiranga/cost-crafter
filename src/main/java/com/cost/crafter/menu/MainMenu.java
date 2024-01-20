@@ -49,6 +49,8 @@ public class MainMenu extends BaseMenuHandler {
     }
 
     private void showManageIncomesMenu() {
+        IncomeMenu incomeMenu = new IncomeMenu();
+        incomeMenu.showIncomeTransactionsMenu();
 
     }
 
