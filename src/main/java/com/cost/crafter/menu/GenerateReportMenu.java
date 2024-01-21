@@ -6,7 +6,6 @@ import com.cost.crafter.service.GenerateReportService;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.util.List;
 
 public class GenerateReportMenu extends BaseMenuHandler {
@@ -33,7 +32,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
         }
     }
 
-    private void generateMonthlyTransactionSummary() throws SQLException {
+    private void generateMonthlyTransactionSummary() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("Enter month (YYYY-MM): ");
@@ -55,15 +54,14 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 return;
             }
 
-            int selectedMonthNum = Integer.parseInt(parts[0], 10);
+            int selectedMonthNum = Integer.parseInt(parts[1], 10);
             String monthInText = MonthConverter(selectedMonthNum);
             System.out.println("Report Data for " + monthInText);
-            System.out.println("---------------------------");
             for (GenerateReport reportDetails : reportData) {
+                System.out.println("---------------------------");
                 System.out.println("Category Name: " + reportDetails.getCategoryName());
                 System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
-                System.out.println("---------------------------");
             }
         } catch (Exception e) {
             e.printStackTrace();

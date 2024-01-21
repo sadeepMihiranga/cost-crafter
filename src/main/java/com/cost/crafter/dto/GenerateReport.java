@@ -23,12 +23,16 @@ public class GenerateReport {
         return actualExpense;
     }
 
-    public void setCategoryName(String name) {
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public void setBudgetAmount(double budgetAmount) {
+        this.budgetAmount = budgetAmount;
     }
 
     public void setActualExpense(double actualExpense) {
+        this.actualExpense = actualExpense;
     }
+
 }

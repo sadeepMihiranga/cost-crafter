@@ -20,10 +20,10 @@ public class GenerateReportRepository extends BaseRepository {
                     "FROM user_expenses_categories " +
                     "JOIN user_budget ON user_expenses_categories.expenses_category_id = user_budget.expenses_category_id " +
                     "LEFT JOIN transaction ON user_budget.user_id = transaction.user_id AND user_budget.expenses_category_id = transaction.expenses_category_id " +
-                    "WHERE user_budget.month = ? AND transaction.user_id = ? " +
+                    "WHERE user_budget.month LIKE ? AND transaction.user_id = ? " +
                     "GROUP BY user_expenses_categories.expenses_category_id";
 
-            List<GenerateReport> monthlyReportDataList = read(readQuery, new GenerateReportMapper(), userInputMonth, userId);
+            List<GenerateReport> monthlyReportDataList = read(readQuery, new GenerateReportMapper(), "%" + userInputMonth + "%", userId);
             return monthlyReportDataList;
         } catch (SQLException e) {
             e.printStackTrace();
