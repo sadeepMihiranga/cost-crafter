@@ -12,6 +12,7 @@ public class Transaction {
     private Integer transactionId;
     private Integer userId;
     private Integer expensesCategoryId;
+    private String expensesCategory;
     private String transactionType;
     private Double transactionAmount;
     private String description;
@@ -22,8 +23,9 @@ public class Transaction {
     private Date updatedDate;
     private Boolean status;
 
-    public Transaction(Integer userId, String transactionType, Double transactionAmount, String description, Date createdDate, Date updatedDate, Boolean status) {
+    public Transaction(Integer userId, Integer expensesCategoryId, String transactionType, Double transactionAmount, String description, Date createdDate, Date updatedDate, Boolean status) {
         this.userId = userId;
+        this.expensesCategoryId = expensesCategoryId;
         this.transactionType = transactionType;
         this.transactionAmount = transactionAmount;
         this.description = description;

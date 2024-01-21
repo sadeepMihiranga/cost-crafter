@@ -14,6 +14,7 @@ public class TransactionMapper implements BaseRepository.RowMapper<Transaction> 
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
         transaction.setUserId(resultSet.getInt("user_id"));
         transaction.setExpensesCategoryId(resultSet.getInt("expenses_category_id"));
+        transaction.setExpensesCategory(resultSet.getString("expenses_category"));
         transaction.setTransactionType(resultSet.getString("transaction_type"));
         transaction.setTransactionAmount(resultSet.getDouble("transaction_amount"));
         transaction.setDescription(resultSet.getString("description"));

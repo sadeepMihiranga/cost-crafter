@@ -73,7 +73,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
         }
     }
 
-    private void viewExpenseCategories() {
+    public void viewExpenseCategories() {
         try {
             userExpensesCategoryService = new UserExpensesCategoryService();
             List<UserExpensesCategory> categories = userExpensesCategoryService.fetchAllCategories(loggedUser().getUserId());
