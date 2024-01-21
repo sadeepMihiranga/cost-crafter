@@ -14,7 +14,7 @@ public class GenerateReportRepository extends BaseRepository {
         super(DbConnectionManager.getInstance());
     }
 
-    public List<GenerateReport> fetchMonthlyReportData(Integer userId, Integer userInputMonth) throws Exception {
+    public List<GenerateReport> fetchMonthlyReportData(Integer userId, String userInputMonth) throws Exception {
         try {
             final String readQuery = "SELECT expenses_categories.name, user_budget.budget_amount, SUM(transaction.transaction_amount) AS actual_expense " +
                     "FROM expenses_categories " +

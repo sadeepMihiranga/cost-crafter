@@ -36,7 +36,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
     private void generateMonthlyTransactionSummary() throws SQLException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-            System.out.print("Enter month (MM-YYYY): ");
+            System.out.print("Enter month (YYYY-MM): ");
             String inputMonth = br.readLine();
 
             String[] parts = inputMonth.split("-");
@@ -44,11 +44,11 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 System.out.print("Invalid Date format");
             }
 
-            int selectedMonth = Integer.parseInt(parts[0]);
-            int selectedYear = Integer.parseInt(parts[1]);
+            int selectedYear = Integer.parseInt(parts[0]);
+            int selectedMonth = Integer.parseInt(parts[1]);
 
             generateReportService = new GenerateReportService(new GenerateReportRepository());
-            List<GenerateReport> reportData = generateReportService.fetchMonthlyReportData(loggedUser().getUserId(), selectedMonth);
+            List<GenerateReport> reportData = generateReportService.fetchMonthlyReportData(loggedUser().getUserId(), inputMonth);
 
             if (reportData.isEmpty()) {
                 System.out.println("No data found for the selected month.");

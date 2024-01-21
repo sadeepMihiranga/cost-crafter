@@ -13,7 +13,7 @@ public class GenerateReportService {
         this.generateReportRepository = generateReportRepository;
     }
 
-    public List<GenerateReport> fetchMonthlyReportData(Integer userId, Integer userInputMonth) throws Exception {
+    public List<GenerateReport> fetchMonthlyReportData(Integer userId, String userInputMonth) throws Exception {
         if (userId == null) {
             throw new Exception("User id is required");
         }else if(userInputMonth == null){
