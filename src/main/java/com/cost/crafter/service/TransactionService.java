@@ -54,7 +54,7 @@ public class TransactionService {
             return false;
         }
         if (transactionAmount == null) {
-            System.out.println(ANSI_RED + "\nIncome Amount is required" + ANSI_RESET);
+            System.out.println(ANSI_RED + "\nExpense Amount is required" + ANSI_RESET);
             return false;
         }
 
