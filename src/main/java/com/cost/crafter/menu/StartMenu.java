@@ -59,7 +59,7 @@ public class StartMenu extends BaseMenuHandler {
             System.out.print("Email : ");
             user.setEmail(br.readLine());
 
-            System.out.print("Date of birth : ");
+            System.out.print("Date of birth (yyyy-MM-dd) : ");
             user.setDateOfBirth(br.readLine());
 
             userService = new UserService();

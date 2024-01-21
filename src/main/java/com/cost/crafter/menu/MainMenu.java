@@ -53,11 +53,11 @@ public class MainMenu extends BaseMenuHandler {
     private void showManageIncomesMenu() {
         IncomeMenu incomeMenu = new IncomeMenu();
         incomeMenu.showIncomeTransactionsMenu();
-
     }
 
     private void showManageExpensesMenu() {
-
+        ExpenseMenu expenseMenu = new ExpenseMenu();
+        expenseMenu.showExpenseTransactionsMenu();
     }
 
     private void showGenerateReportMenu() {
