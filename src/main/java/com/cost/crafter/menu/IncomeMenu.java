@@ -1,6 +1,7 @@
 package com.cost.crafter.menu;
 
 import com.cost.crafter.dto.Transaction;
+import com.cost.crafter.enums.TransactionType;
 import com.cost.crafter.service.TransactionService;
 import de.vandermeer.asciitable.AsciiTable;
 
@@ -75,7 +76,7 @@ public class IncomeMenu extends BaseMenuHandler{
             incomeTransList = new ArrayList<>();
 
             transactionService = new TransactionService();
-            List<Transaction> userIncomeTransactions = transactionService.fetchIncomeTransactions(loggedUser().getUserId());
+            List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.CREDIT.toString());
 
             asciiTable = initTable("Income Transaction Id", "Amount", "Description", "Created Date", "Updated Date");
             for (Transaction incomeTransaction : userIncomeTransactions) {

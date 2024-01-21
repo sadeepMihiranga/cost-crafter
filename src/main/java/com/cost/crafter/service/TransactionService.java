@@ -34,12 +34,38 @@ public class TransactionService {
 
         Date createdDate = new Date();
         transactionRepository = new TransactionRepository();
-        transactionRepository.insertIncome(new Transaction(userId, TransactionType.CREDIT.toString(), transactionAmount, description, createdDate , createdDate, true));
+        transactionRepository.insertTransaction(new Transaction(userId, 0, TransactionType.CREDIT.toString(), transactionAmount, description, createdDate , createdDate, true));
         return true;
     }
 
-    public List<Transaction> fetchIncomeTransactions(Integer userId) throws Exception{
+    public boolean addExpenseTransaction (Integer userId, Integer expensesCategoryId, Double transactionAmount, String description) throws Exception {
+        System.out.println("\n Adding Expense...");
+
+        if (userId == null) {
+            System.out.println(ANSI_RED + "\nUser ID is required" + ANSI_RESET);
+            return false;
+        }
+        if (expensesCategoryId == null) {
+            System.out.println(ANSI_RED + "\nExpense Category ID is required" + ANSI_RESET);
+            return false;
+        }
+        if (StringUtils.isNullOrEmpty(description)) {
+            System.out.println(ANSI_RED + "\nDescription is required" + ANSI_RESET);
+            return false;
+        }
+        if (transactionAmount == null) {
+            System.out.println(ANSI_RED + "\nIncome Amount is required" + ANSI_RESET);
+            return false;
+        }
+
+        Date createdDate = new Date();
+        transactionRepository = new TransactionRepository();
+        transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId, TransactionType.DEBIT.toString(), transactionAmount, description, createdDate , createdDate, true));
+        return true;
+    }
+
+    public List<Transaction> fetchTransactions(Integer userId, String transactionType) throws Exception{
          transactionRepository = new TransactionRepository();
-         return transactionRepository.fetchTransactions(userId, TransactionType.CREDIT.toString());
+         return transactionRepository.fetchTransactions(userId, transactionType);
     }
 }

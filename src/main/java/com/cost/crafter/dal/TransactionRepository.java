@@ -13,11 +13,11 @@ public class TransactionRepository extends BaseRepository{
         super(DbConnectionManager.getInstance());
     }
 
-    public int insertIncome(Transaction transaction) throws Exception{
+    public int insertTransaction(Transaction transaction) throws Exception{
         try{
             final String insertIncomeQuery = "INSERT INTO transaction (user_id, expenses_category_id, transaction_type, transaction_amount, description, " +
                     " is_recurring, recurrence_type, recurrence_upto, created_date, updated_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            Object[] values = {transaction.getUserId(), null, transaction.getTransactionType(), transaction.getTransactionAmount(), transaction.getDescription(),
+            Object[] values = {transaction.getUserId(), transaction.getExpensesCategoryId() == 0 ? null : transaction.getExpensesCategoryId(), transaction.getTransactionType(), transaction.getTransactionAmount(), transaction.getDescription(),
                                 false, null, null, transaction.getCreatedDate(), transaction.getUpdatedDate(), transaction.getStatus()};
             return create(insertIncomeQuery, values);
         } catch (Exception e){
@@ -28,7 +28,12 @@ public class TransactionRepository extends BaseRepository{
 
     public List<Transaction> fetchTransactions(Integer userId, String transactionType) throws Exception {
         try {
-            final String insertQuery = "SELECT * FROM transaction WHERE user_id = ? AND transaction_type = ?";
+            final String insertQuery = " " +
+                    "SELECT tr.*, ec.name as expenses_category " +
+                    "FROM transaction tr " +
+                    "LEFT JOIN user_expenses_categories ec ON tr.expenses_category_id = ec.expenses_category_id " +
+                    "WHERE tr.user_id = ? AND tr.transaction_type = ?";
+
             Object[] values = {userId, transactionType};
             return read(insertQuery, new TransactionMapper(), values);
         } catch (Exception e) {
