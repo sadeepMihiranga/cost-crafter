@@ -52,10 +52,9 @@ public class IncomeMenu extends BaseMenuHandler{
             System.out.print("Enter income description: ");
             String description = br.readLine();
 
-
             // Call the service method to insert the new category
             TransactionService transactionService = new TransactionService();
-            transactionService.addIncomeTransaction(loggedUser().getUserId(), Double.parseDouble(incomeAmount),description);
+            transactionService.addIncomeTransaction(loggedUser().getUserId(), Double.parseDouble(incomeAmount), description);
 
             System.out.println("Income transaction added successfully!");
         } catch (Exception e) {
@@ -76,12 +75,14 @@ public class IncomeMenu extends BaseMenuHandler{
             incomeTransList = new ArrayList<>();
 
             transactionService = new TransactionService();
-            List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.CREDIT.toString());
+            List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(),
+                    TransactionType.CREDIT.toString());
 
             asciiTable = initTable("Income Transaction Id", "Amount", "Description", "Created Date", "Updated Date");
             for (Transaction incomeTransaction : userIncomeTransactions) {
-                addTableRow(asciiTable, incomeTransaction.getTransactionId(), incomeTransaction.getTransactionAmount(), incomeTransaction.getDescription(), incomeTransaction.getCreatedDate()
-                , incomeTransaction.getUpdatedDate());
+                addTableRow(asciiTable, incomeTransaction.getTransactionId(), incomeTransaction.getTransactionAmount(),
+                        incomeTransaction.getDescription(), incomeTransaction.getCreatedDate(),
+                        incomeTransaction.getUpdatedDate());
 
                 if (maxIncomeTransId < incomeTransaction.getTransactionId()) {
                     maxIncomeTransId = incomeTransaction.getTransactionId();
