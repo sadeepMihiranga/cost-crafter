@@ -4,7 +4,10 @@ import com.cost.crafter.dto.User;
 import com.cost.crafter.service.UserService;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Console;
+import java.util.Arrays;
 
 import static com.cost.crafter.util.FontColors.*;
 
@@ -32,7 +35,7 @@ public class StartMenu extends BaseMenuHandler {
                 }
             } while (selectedOption != 3);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         }
     }
 
@@ -84,6 +87,7 @@ public class StartMenu extends BaseMenuHandler {
             String username = br.readLine();
             System.out.print("Enter password : ");
             String password = br.readLine();
+            //String password = readPassword(br);
 
             UserService userService = new UserService();
             User user = userService.login(username, password);
@@ -96,11 +100,23 @@ public class StartMenu extends BaseMenuHandler {
                 mainMenu.showMainMenu();
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
             showErrorMessage("\nError while login user");
         } finally {
             mainMenu = null;
         }
+    }
+
+    private String readPassword(BufferedReader reader) throws IOException {
+        StringBuilder password = new StringBuilder();
+        while (true) {
+            int charCode = System.in.read();
+            if (charCode == '\r' || charCode == '\n' || charCode == -1) {
+                break;
+            }
+            password.append((char) charCode);
+            System.out.print("*"); // Mask the input
+        }
+        return password.toString();
     }
 
     private void handleInvalidLogin() {
@@ -127,7 +143,7 @@ public class StartMenu extends BaseMenuHandler {
             } while (selectedOption != 3);
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while login.");
         }
     }
 }

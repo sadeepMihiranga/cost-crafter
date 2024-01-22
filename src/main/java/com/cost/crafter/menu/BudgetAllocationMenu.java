@@ -41,7 +41,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         }
     }
 
@@ -97,7 +97,6 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
             } while (selectedOption != exitOptionId);
 
         } catch (Exception exception) {
-            exception.printStackTrace();
             showErrorMessage("\nError while allocating budget");
         } finally {
             userExpensesCategoryService = null;
@@ -142,7 +141,6 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
             showSuccessMessage("\nBudget allocated successfully");
             showManageBudgetsMenu();
         } catch (Exception e) {
-            e.printStackTrace();
             showErrorMessage("\nError while allocating budget");
         } finally {
             userBudgetService = null;
@@ -201,7 +199,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 }
             } while (selectedOption != exitOptionId);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         } finally {
             asciiTable = null;
             budgetIdList = null;
@@ -256,7 +254,7 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 }
             } while (selectedOption != 3);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while update allocation");
         } finally {
             userBudgetService = null;
         }
