@@ -22,7 +22,7 @@ public class TransactionRepository extends BaseRepository{
             Object[] values = {transaction.getUserId(), transaction.getExpensesCategoryId() == 0 ? null
                     : transaction.getExpensesCategoryId(), transaction.getTransactionType(),
                     transaction.getTransactionAmount(), transaction.getDescription(),
-                    false, null, null, "", transaction.getCreatedDate(), transaction.getUpdatedDate(),
+                    false, null, null, transaction.getTransactionDate(), transaction.getCreatedDate(), transaction.getUpdatedDate(),
                     transaction.getStatus()};
             return create(insertIncomeQuery, values);
         } catch (Exception e){
@@ -43,6 +43,33 @@ public class TransactionRepository extends BaseRepository{
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("Error while executing SQL");
+        }
+    }
+
+    public Transaction transactionDetailsById(Integer transactionId) throws Exception {
+        try {
+            final String insertQuery = "SELECT tr.*, ec.name as expenses_category " +
+                    "FROM transaction tr " +
+                    "LEFT JOIN user_expenses_categories ec ON tr.expenses_category_id = ec.expenses_category_id "+
+            "WHERE transaction_id = ?";
+            Object[] values = {transactionId};
+            return readOne(insertQuery, new TransactionMapper(), values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while executing SQL");
+        }
+    }
+
+    public void updateTransaction(Transaction transaction) throws Exception {
+        try {
+            final String updateQuery = "UPDATE transaction SET user_id = ? , transaction_type =?, transaction_amount =?, description =?, is_recurring =?, recurrence_type =?," +
+                    " recurrence_upto =?, updated_date =?, status =? WHERE transaction_id = ?";
+            Object[] values = {transaction.getUserId(), transaction.getTransactionType(), transaction.getTransactionAmount(), transaction.getDescription(),
+                    transaction.getIsRecurring(), transaction.getRecurrenceType(), transaction.getRecurrenceUpto(), transaction.getUpdatedDate(), transaction.getStatus(),transaction.getTransactionId()};
+            update(updateQuery, values);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Error while updating transaction");
         }
     }
 
