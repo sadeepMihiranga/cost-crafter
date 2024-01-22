@@ -15,7 +15,7 @@ public class TransactionService {
 
     private TransactionRepository  transactionRepository = null;
 
-    public boolean addIncomeTransaction (Integer userId, Double transactionAmount, String description) throws Exception{
+    public boolean addIncomeTransaction (Integer userId, Double transactionAmount, String description) throws Exception {
         System.out.println("\n Adding Income...");
 
         //input validations for income entry
@@ -32,13 +32,18 @@ public class TransactionService {
             return false;
         }
 
+        // TODO : need to ask for the transaction date if we manage backdated incomes
+
         Date createdDate = new Date();
         transactionRepository = new TransactionRepository();
-        transactionRepository.insertTransaction(new Transaction(userId, 0, TransactionType.CREDIT.toString(), transactionAmount, description, createdDate , createdDate, true));
+        transactionRepository.insertTransaction(new Transaction(userId, 0,
+                TransactionType.CREDIT.toString(), transactionAmount, description, createdDate, createdDate ,
+                createdDate, true));
         return true;
     }
 
-    public boolean addExpenseTransaction (Integer userId, Integer expensesCategoryId, Double transactionAmount, String description) throws Exception {
+    public boolean addExpenseTransaction (Integer userId, Integer expensesCategoryId, Double transactionAmount,
+                                          String description) throws Exception {
         System.out.println("\n Adding Expense...");
 
         if (userId == null) {
@@ -58,9 +63,15 @@ public class TransactionService {
             return false;
         }
 
+        // TODO : need to ask for the transaction date if manage backdated expenses
+        // TODO : if not insert transaction date, then we cannot map budget with expenses. coz there are no attribute
+        //        to map month in budget entity with transaction entity
+
         Date createdDate = new Date();
         transactionRepository = new TransactionRepository();
-        transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId, TransactionType.DEBIT.toString(), transactionAmount, description, createdDate , createdDate, true));
+        transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId,
+                TransactionType.DEBIT.toString(), transactionAmount, description, createdDate, createdDate,
+                createdDate, true));
         return true;
     }
 
