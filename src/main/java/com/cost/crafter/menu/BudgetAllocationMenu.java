@@ -118,8 +118,6 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 allocateBudget(expensesCategoryId);
             }
 
-            // TODO : only future month validation
-
             userBudgetService = new UserBudgetService();
             UserBudget userBudget = userBudgetService.checkForDuplicateBudgetEntry(loggedUser().getUserId(), month,
                     expensesCategoryId);
@@ -193,9 +191,6 @@ public class BudgetAllocationMenu extends BaseMenuHandler {
                 selectedOption = intSelectedOption(br, exitOptionId+1);
 
                 if (budgetIdList.contains(selectedOption)) {
-                    /*final int finalSelectedOption = selectedOption;
-                    UserBudget selectedUserBudget = userBudgets.stream().filter(userBudget -> userBudget
-                            .getUserBudgetId().equals(finalSelectedOption)).findAny().orElse(null);*/
                     updateBudgetAllocation(selectedOption);
                 } else if (selectedOption == mainMenuOptionId) {
                     goToMainMenu();

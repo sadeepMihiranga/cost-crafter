@@ -13,9 +13,11 @@ public class GenerateReportMapper implements BaseRepository.RowMapper<GenerateRe
     public GenerateReport mapRow(ResultSet resultSet) throws SQLException {
 
         GenerateReport generateReport = new GenerateReport();
+
         generateReport.setCategoryName(resultSet.getString("name"));
         generateReport.setBudgetAmount(resultSet.getDouble("budget_amount"));
         generateReport.setActualExpense(resultSet.getDouble("actual_expense"));
+
         return generateReport;
     }
 }

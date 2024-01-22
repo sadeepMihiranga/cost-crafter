@@ -12,6 +12,7 @@ public class UserMapper implements BaseRepository.RowMapper<User> {
     public User mapRow(ResultSet resultSet) throws SQLException {
 
         User user = new User();
+
         user.setUserId(resultSet.getInt("user_id"));
         user.setUsername(resultSet.getString("user_name"));
         user.setPassword(resultSet.getString("password"));
