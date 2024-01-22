@@ -9,4 +9,7 @@ public class Main {
             new StartMenu().showStartMenu();
         } catch (Exception ex) {ex.printStackTrace();}
     }
+
+    public void consoleFunc() {
+    }
 }

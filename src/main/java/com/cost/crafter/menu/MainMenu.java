@@ -36,7 +36,7 @@ public class MainMenu extends BaseMenuHandler {
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         }
     }
     
