@@ -25,7 +25,7 @@ public class UserExpensesCategoryService {
                 insertUserExpensesCategory(new UserExpensesCategory(userId, category.getName(), category.getDescription()));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while syncing default expenses categories");
         } finally {
             expensesCategoryService = null;
@@ -37,7 +37,7 @@ public class UserExpensesCategoryService {
             userExpensesCategoryRepository = new UserExpensesCategoryRepository();
             userExpensesCategoryRepository.insertUserExpensesCategory(userExpensesCategory);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while inserting user expenses categories");
         } finally {
             userExpensesCategoryRepository = null;
@@ -52,7 +52,7 @@ public class UserExpensesCategoryService {
             userExpensesCategoryRepository = new UserExpensesCategoryRepository();
             return userExpensesCategoryRepository.fetchAllCategories(userId);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while fetching user expenses categories");
         } finally {
             userExpensesCategoryRepository = null;
@@ -65,7 +65,7 @@ public class UserExpensesCategoryService {
             userExpensesCategoryRepository = new UserExpensesCategoryRepository();
             return userExpensesCategoryRepository.fetchUserExpensesCategory(existingCategory);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         } finally {
             userExpensesCategoryRepository = null;
@@ -77,7 +77,7 @@ public class UserExpensesCategoryService {
             userExpensesCategoryRepository = new UserExpensesCategoryRepository();
             userExpensesCategoryRepository.updateUserExpensesCategory(existingCategory);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while updating user expenses category");
         } finally {
             userExpensesCategoryRepository = null;
@@ -96,7 +96,7 @@ public class UserExpensesCategoryService {
                 System.out.println("Category with ID " + categoryToDelete.getExpensesCategoryId() + " does not exist.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while deleting user expenses category");
         } finally {
             userExpensesCategoryRepository = null;

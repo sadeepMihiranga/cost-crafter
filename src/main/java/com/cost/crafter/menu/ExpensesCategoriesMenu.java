@@ -40,7 +40,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
-            exception.printStackTrace();
+//            exception.printStackTrace();
         }
     }
 
@@ -68,7 +68,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
 
             System.out.println("Expense category created successfully!");
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error creating expense category");
         }
     }
@@ -92,7 +92,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 System.out.println("---------------------------");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error fetching expense categories");
         }
     }
@@ -135,7 +135,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 showErrorMessage("Category not found with the given ID");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error updating expense category");
         }
     }
@@ -161,7 +161,7 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
 
             System.out.println("Expense category deleted successfully!");
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error deleting expense category");
         }
     }

@@ -23,11 +23,25 @@ public class GenerateReportService {
             generateReportRepository = new GenerateReportRepository();
             return generateReportRepository.fetchMonthlyReportData(userId, userInputMonth);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while fetching report data");
         } finally {
             generateReportRepository = null;
         }
+    }
 
+    public List<GenerateReport> fetchSixMonthReportData(Integer userId) throws Exception {
+        if (userId == null) {
+            throw new Exception("User id is required");
+        }
+        try {
+            generateReportRepository = new GenerateReportRepository();
+            return generateReportRepository.fetchSixMonthReportData(userId);
+        } catch (Exception e) {
+//            e.printStackTrace();
+            throw new Exception("Error while fetching report data");
+        } finally {
+            generateReportRepository = null;
+        }
     }
 }
