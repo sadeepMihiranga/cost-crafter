@@ -33,7 +33,7 @@ public class GenerateReportRepository extends BaseRepository {
 
     public List<GenerateReport> fetchSixMonthReportData(Integer userId) throws Exception {
         try {
-            final String readQuery = "SELECT DATE_FORMAT(transaction.created_date, '%Y-%m') AS name, " +
+            final String readQuery = "SELECT DATE_FORMAT(transaction.transaction_date, '%Y-%m') AS name, " +
                     "COALESCE(SUM(user_budget.budget_amount), 0) AS budget_amount, " +
                     "COALESCE(SUM(transaction.transaction_amount), 0) AS actual_expense " +
                     "FROM user_budget " +
@@ -41,9 +41,9 @@ public class GenerateReportRepository extends BaseRepository {
                     "LEFT JOIN transaction ON user_budget.user_id = transaction.user_id " +
                     "AND user_budget.expenses_category_id = transaction.expenses_category_id " +
                     "WHERE user_budget.user_id = ? " +
-                    "AND DATE_FORMAT(transaction.created_date, '%Y-%m') >= DATE_FORMAT(CURDATE() - INTERVAL 6 MONTH, '%Y-%m') " +
-                    "GROUP BY DATE_FORMAT(transaction.created_date, '%Y-%m') " +
-                    "ORDER BY DATE_FORMAT(transaction.created_date, '%Y-%m') DESC";
+                    "AND DATE_FORMAT(transaction.transaction_date, '%Y-%m') >= DATE_FORMAT(CURDATE() - INTERVAL 6 MONTH, '%Y-%m') " +
+                    "GROUP BY DATE_FORMAT(transaction.transaction_date, '%Y-%m') " +
+                    "ORDER BY DATE_FORMAT(transaction.transaction_date, '%Y-%m') DESC";
 
             List<GenerateReport> sixMonthlyReportDataList = read(readQuery, new GenerateReportMapper(), userId);
 

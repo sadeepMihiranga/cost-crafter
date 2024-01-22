@@ -28,7 +28,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 default -> showErrorMessage("Invalid option! Please try again.");
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+//            exception.printStackTrace();
         }
     }
 
@@ -64,7 +64,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error reading input");
         }
     }
@@ -87,7 +87,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error reading input");
         }
     }
