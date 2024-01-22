@@ -79,4 +79,18 @@ public class TransactionService {
          transactionRepository = new TransactionRepository();
          return transactionRepository.fetchTransactions(userId, transactionType);
     }
+
+    public Transaction getTransactionById(Integer transactionId) throws Exception {
+        transactionRepository = new TransactionRepository();
+        return transactionRepository.transactionDetailsById(transactionId);
+    }
+
+    public boolean updateTransaction(Transaction transaction) throws Exception {
+        Date updatedDate = new Date();
+        transaction.setUpdatedDate(updatedDate);
+        transactionRepository = new TransactionRepository();
+        transactionRepository.updateTransaction(transaction);
+        return true;
+
+    }
 }
