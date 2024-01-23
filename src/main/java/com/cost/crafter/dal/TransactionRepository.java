@@ -3,6 +3,7 @@ package com.cost.crafter.dal;
 import com.cost.crafter.config.DbConnectionManager;
 import com.cost.crafter.dal.mapper.TransactionMapper;
 import com.cost.crafter.dto.Transaction;
+import com.cost.crafter.dto.UserExpensesCategory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -26,7 +27,6 @@ public class TransactionRepository extends BaseRepository{
                     transaction.getStatus()};
             return create(insertIncomeQuery, values);
         } catch (Exception e){
-            e.printStackTrace();
             throw new Exception("Error while executing income transaction insert SQL");
         }
     }
@@ -41,7 +41,6 @@ public class TransactionRepository extends BaseRepository{
             Object[] values = {userId, transactionType};
             return read(selectQuery, new TransactionMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -55,21 +54,29 @@ public class TransactionRepository extends BaseRepository{
             Object[] values = {transactionId};
             return readOne(insertQuery, new TransactionMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
 
     public void updateTransaction(Transaction transaction) throws Exception {
         try {
-            final String updateQuery = "UPDATE transaction SET user_id = ? , transaction_type =?, transaction_amount =?, description =?, is_recurring =?, recurrence_type =?," +
+            final String updateQuery = "UPDATE transaction SET user_id = ? , transaction_type =?, transaction_amount =?, transaction_date=?, description =?, is_recurring =?, recurrence_type =?," +
                     " recurrence_upto =?, updated_date =?, status =? WHERE transaction_id = ?";
-            Object[] values = {transaction.getUserId(), transaction.getTransactionType(), transaction.getTransactionAmount(), transaction.getDescription(),
+            Object[] values = {transaction.getUserId(), transaction.getTransactionType(), transaction.getTransactionAmount(), transaction.getTransactionDate(), transaction.getDescription(),
                     transaction.getIsRecurring(), transaction.getRecurrenceType(), transaction.getRecurrenceUpto(), transaction.getUpdatedDate(), transaction.getStatus(),transaction.getTransactionId()};
             update(updateQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while updating transaction");
+        }
+    }
+
+    public void deleteTransaction(int transactionId) throws Exception {
+        try {
+            final String deleteQuery = "DELETE FROM transaction WHERE transaction_id = ?";
+            Object[] values = {transactionId};
+            delete(deleteQuery, values);
+        } catch (Exception e) {
+            throw new Exception("Error while deleting Expense Transaction");
         }
     }
 
