@@ -23,8 +23,8 @@ public class IncomeMenu extends BaseMenuHandler{
                 System.out.println("-------------------------------------\n");
                 System.out.println("1 - Create new income");
                 System.out.println("2 - View/Update income transactions");
-                System.out.println("4 - Main menu");
-                System.out.println("5 - Exit");
+                System.out.println("3 - Main menu");
+                System.out.println("4 - Exit");
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
