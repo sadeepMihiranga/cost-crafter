@@ -23,8 +23,8 @@ public class IncomeMenu extends BaseMenuHandler{
                 System.out.println("-------------------------------------\n");
                 System.out.println("1 - Create new income");
                 System.out.println("2 - View/Update income transactions");
-                System.out.println("4 - Main menu");
-                System.out.println("5 - Exit");
+                System.out.println("3 - Main menu");
+                System.out.println("4 - Exit");
                 System.out.println("\n-------------------------------------\n");
                 System.out.print("Select an option : ");
 
@@ -125,5 +125,76 @@ public class IncomeMenu extends BaseMenuHandler{
         }
     }
 
-    private void updateIncomeTransaction(Integer transactionId){}
+    private void updateIncomeTransaction(Integer transactionId){
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            showMenuHeader("\nUpdate Income \n");
+            int selectedOption = 0;
+
+            transactionService = new TransactionService();
+            Transaction transactionDetails = transactionService.getTransactionById(transactionId);
+
+            do {
+                System.out.println("Income transaction id : " + transactionDetails.getTransactionId());
+                System.out.println("Income transaction amount : " + transactionDetails.getTransactionAmount());
+                System.out.println("Income transaction description : " + transactionDetails.getDescription());
+                System.out.println("Transaction Created Date : " + transactionDetails.getCreatedDate());
+
+                System.out.println("\nSelect an option :");
+
+                System.out.println("-------------------------------------\n");
+                System.out.println(String.format("%s - Update income amount", 1));
+                System.out.println(String.format("%s - Update income description", 2));
+                System.out.println(String.format("%s - Main menu", 3));
+                System.out.println(String.format("%s - Exit", 4));
+                System.out.println("\n-------------------------------------\n");
+                System.out.print("Select an option : ");
+                selectedOption = intSelectedOption(br, 5);
+
+                if (selectedOption == 1) {
+                    System.out.print("\nEnter new income amount to update : ");
+                    final double newAmount = doubleSelectedOption(br, -1);
+
+
+                    if (newAmount < 0 ) {
+                        showErrorMessage("Invalid amount ! Please try again.");
+                        updateIncomeTransaction(transactionId);
+                    }
+                    transactionDetails.setTransactionAmount(newAmount);
+                    final boolean isUpdated = transactionService.updateTransaction(transactionDetails);
+                    if (!isUpdated) {
+                        updateIncomeTransaction(transactionId);
+                    }
+                    showSuccessMessage("\nIncome amount updated successfully\n");
+                    viewAllIncomeTransactions();
+                } else if(selectedOption == 2){
+                    System.out.print("\nEnter new income description to update : ");
+                    final String newDescription = br.readLine();
+
+                    if (newDescription.isEmpty() ) {
+                        showErrorMessage("Invalid description ! Please try again.");
+                        updateIncomeTransaction(transactionId);
+                    }
+                    transactionDetails.setDescription(newDescription);
+                    final boolean isUpdated = transactionService.updateTransaction(transactionDetails);
+                    if (!isUpdated) {
+                        updateIncomeTransaction(transactionId);
+                    }
+                    showSuccessMessage("\nIncome amount updated successfully\n");
+                    viewAllIncomeTransactions();
+
+                }else if (selectedOption == 3) {
+                    goToMainMenu();
+                } else if (selectedOption == 4) {
+                    exit();
+                } else {
+                    showErrorMessage("Invalid option ! Please try again.");
+                }
+            } while (selectedOption != 4);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            transactionService = null;
+        }
+    }
 }

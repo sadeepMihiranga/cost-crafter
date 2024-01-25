@@ -1,10 +1,14 @@
 package com.cost.crafter.service;
 
 import com.cost.crafter.dal.TransactionRepository;
+import com.cost.crafter.dal.UserExpensesCategoryRepository;
 import com.cost.crafter.dto.Transaction;
+import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.enums.TransactionType;
 import com.mysql.cj.util.StringUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +43,7 @@ public class TransactionService {
         return true;
     }
 
-    public boolean addExpenseTransaction (Integer userId, Integer expensesCategoryId, Double transactionAmount,
+    public boolean addExpenseTransaction (Integer userId, String transactionDate, Integer expensesCategoryId, Double transactionAmount,
                                           String description) throws Exception {
         System.out.println("\n Adding Expense...");
 
@@ -65,9 +69,11 @@ public class TransactionService {
         //        to map month in budget entity with transaction entity
 
         Date createdDate = new Date();
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId,
-                TransactionType.DEBIT.toString(), transactionAmount, description, createdDate, createdDate,
+                TransactionType.DEBIT.toString(), transactionAmount, description, dateFormatter.parse(transactionDate), createdDate,
                 createdDate, true));
         return true;
     }
@@ -75,5 +81,26 @@ public class TransactionService {
     public List<Transaction> fetchTransactions(Integer userId, String transactionType) throws Exception{
          transactionRepository = new TransactionRepository();
          return transactionRepository.fetchTransactions(userId, transactionType);
+    }
+
+    public Transaction getTransactionById(Integer transactionId) throws Exception {
+        transactionRepository = new TransactionRepository();
+        return transactionRepository.transactionDetailsById(transactionId);
+    }
+
+    public boolean updateTransaction(Transaction transaction) throws Exception {
+        Date updatedDate = new Date();
+        transaction.setUpdatedDate(updatedDate);
+        transactionRepository = new TransactionRepository();
+        transactionRepository.updateTransaction(transaction);
+        return true;
+    }
+
+    public void deleteTransaction(int transactionId) throws Exception {
+        try {
+            transactionRepository.deleteTransaction((transactionId));
+        } catch (Exception e) {
+            throw new Exception("Error while deleting user expenses category");
+        }
     }
 }

@@ -14,7 +14,7 @@ public class ExpensesCategoryService {
             expensesCategoryRepository = new ExpensesCategoryRepository();
             return expensesCategoryRepository.fetchDefaultExpensesCategories();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             throw new Exception("Error while fetching default expenses categories");
         } finally {
             expensesCategoryRepository = null;

@@ -28,7 +28,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 default -> showErrorMessage("Invalid option! Please try again.");
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+//            exception.printStackTrace();
         }
     }
 
@@ -64,13 +64,32 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             showErrorMessage("Error reading input");
         }
     }
 
     private void generateSixMonthlyTransactionSummary() {
+        try {
+            generateReportService = new GenerateReportService(new GenerateReportRepository());
+            List<GenerateReport> sixMonthReportData = generateReportService.fetchSixMonthReportData(loggedUser().getUserId());
 
+            if (sixMonthReportData.isEmpty()) {
+                System.out.println("No data found for the past 6 months.");
+                return;
+            }
+
+            System.out.println("Report Data for past 6 months");
+            for (GenerateReport reportDetails : sixMonthReportData) {
+                System.out.println("---------------------------");
+                System.out.println("Category Name: " + reportDetails.getCategoryName());
+                System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
+                System.out.println("ActualExpense: " + reportDetails.getActualExpense());
+            }
+        } catch (Exception e) {
+//            e.printStackTrace();
+            showErrorMessage("Error reading input");
+        }
     }
 
     public static String MonthConverter(int selectedMonthNumber) {
