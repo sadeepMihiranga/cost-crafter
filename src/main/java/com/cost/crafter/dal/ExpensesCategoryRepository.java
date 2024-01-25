@@ -16,8 +16,7 @@ public class ExpensesCategoryRepository extends BaseRepository {
     public List<ExpensesCategory> fetchDefaultExpensesCategories() throws Exception {
         try {
             final String readQuery = "SELECT * FROM expenses_categories";
-            List<ExpensesCategory> expensesCategoryList = read(readQuery, new ExpensesCategoryMapper(),
-                    null);
+            List<ExpensesCategory> expensesCategoryList = read(readQuery, new ExpensesCategoryMapper(), null);
             return expensesCategoryList;
         } catch (SQLException e) {
             e.printStackTrace();

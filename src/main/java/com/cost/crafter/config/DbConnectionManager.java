@@ -20,8 +20,6 @@ public class DbConnectionManager {
         final String password = properties.getProperty("db.password");
 
         conn = DriverManager.getConnection(url, username, password);
-
-        // System.out.println("Connected to database");
     }
 
     public Connection getConnection() {
