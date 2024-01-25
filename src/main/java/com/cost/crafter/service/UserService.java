@@ -25,17 +25,14 @@ public class UserService {
             System.out.println(ANSI_RED + "\nDate of birth should be in yyyy-MM-dd format" + ANSI_RESET);
             return false;
         }
-
         if (!CommonValidatorUtil.isEmailValid(user.getEmail())) {
             System.out.println(ANSI_RED + "\nEmail is invalid" + ANSI_RESET);
             return false;
         }
-
         if (!CommonValidatorUtil.isAlpha(user.getFirstName())) {
             System.out.println(ANSI_RED + "\nFirst name can only contains letters" + ANSI_RESET);
             return false;
         }
-
         if (!StringUtils.isNullOrEmpty(user.getLastName()) && !CommonValidatorUtil.isAlpha(user.getLastName())) {
             System.out.println(ANSI_RED + "\nLast name can only contains letters" + ANSI_RESET);
             return false;
