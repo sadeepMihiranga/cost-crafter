@@ -13,7 +13,7 @@ public class UserBudget {
     private String month;
     private Double budgetAmount;
 
-    // not a data entity
+    // not a data entity field
     private String expenseCategoryName;
 
     public UserBudget(Integer userId, Integer expenseCategoryId, String month, Double budgetAmount) {

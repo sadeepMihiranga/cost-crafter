@@ -26,7 +26,6 @@ public class GenerateReportRepository extends BaseRepository {
             List<GenerateReport> monthlyReportDataList = read(readQuery, new GenerateReportMapper(), "%" + userInputMonth + "%", userId);
             return monthlyReportDataList;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -45,11 +44,8 @@ public class GenerateReportRepository extends BaseRepository {
                     "GROUP BY DATE_FORMAT(transaction.transaction_date, '%Y-%m') " +
                     "ORDER BY DATE_FORMAT(transaction.transaction_date, '%Y-%m') DESC";
 
-            List<GenerateReport> sixMonthlyReportDataList = read(readQuery, new GenerateReportMapper(), userId);
-
-            return sixMonthlyReportDataList;
+            return read(readQuery, new GenerateReportMapper(), userId);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }

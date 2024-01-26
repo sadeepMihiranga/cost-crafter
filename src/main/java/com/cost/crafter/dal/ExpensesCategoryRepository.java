@@ -20,7 +20,6 @@ public class ExpensesCategoryRepository extends BaseRepository {
                     null);
             return expensesCategoryList;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }

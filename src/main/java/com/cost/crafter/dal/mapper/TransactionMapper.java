@@ -9,7 +9,8 @@ import java.sql.SQLException;
 public class TransactionMapper implements BaseRepository.RowMapper<Transaction> {
 
     @Override
-    public Transaction mapRow(ResultSet resultSet) throws SQLException{
+    public Transaction mapRow(ResultSet resultSet) throws SQLException {
+
         Transaction transaction = new Transaction();
         transaction.setTransactionId(resultSet.getInt("transaction_id"));
         transaction.setUserId(resultSet.getInt("user_id"));

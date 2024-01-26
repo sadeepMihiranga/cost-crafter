@@ -12,7 +12,6 @@ public class UserMapper implements BaseRepository.RowMapper<User> {
     public User mapRow(ResultSet resultSet) throws SQLException {
 
         User user = new User();
-
         user.setUserId(resultSet.getInt("user_id"));
         user.setUsername(resultSet.getString("user_name"));
         user.setPassword(resultSet.getString("password"));
@@ -20,7 +19,6 @@ public class UserMapper implements BaseRepository.RowMapper<User> {
         user.setLastName(resultSet.getString("last_name"));
         user.setEmail(resultSet.getString("email"));
         user.setDateOfBirth(resultSet.getString("date_of_birth"));
-
         return user;
     }
 }

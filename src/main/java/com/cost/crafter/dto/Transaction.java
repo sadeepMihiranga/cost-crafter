@@ -24,7 +24,8 @@ public class Transaction {
     private Boolean status;
 
     public Transaction(Integer userId, Integer expensesCategoryId, String transactionType, Double transactionAmount,
-                       String description, String recurrenceType, Date transactionDate, Date createdDate, Date updatedDate, Boolean status) {
+                       String description, String recurrenceType, Date transactionDate, Date createdDate,
+                       Date updatedDate, Boolean status) {
         this.userId = userId;
         this.expensesCategoryId = expensesCategoryId;
         this.transactionType = transactionType;

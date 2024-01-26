@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IncomeMenu extends BaseMenuHandler{
+public class IncomeMenu extends BaseMenuHandler {
 
     private TransactionService transactionService = null;
 
@@ -37,7 +37,7 @@ public class IncomeMenu extends BaseMenuHandler{
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         }
     }
 

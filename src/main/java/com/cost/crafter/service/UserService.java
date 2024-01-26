@@ -55,10 +55,8 @@ public class UserService {
                 userExpensesCategoryService = new UserExpensesCategoryService();
                 userExpensesCategoryService.syncDefaultCategories(createdId);
             }
-
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while processing user registration");
         } finally {
             userExpensesCategoryService = null;
@@ -78,7 +76,6 @@ public class UserService {
             }
             return user;
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while processing login");
         } finally {
             userRepository = null;

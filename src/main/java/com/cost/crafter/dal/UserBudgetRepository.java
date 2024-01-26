@@ -21,7 +21,6 @@ public class UserBudgetRepository extends BaseRepository {
                     userBudget.getBudgetAmount()};
             create(insertQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -33,7 +32,6 @@ public class UserBudgetRepository extends BaseRepository {
             Object[] values = {userId, month, expensesCategoryId};
             return readOne(insertQuery, new UserBudgetMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -44,7 +42,6 @@ public class UserBudgetRepository extends BaseRepository {
             Object[] values = {userId};
             return read(insertQuery, new UserBudgetMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -57,7 +54,6 @@ public class UserBudgetRepository extends BaseRepository {
                     userBudget.getMonth()};
             return update(insertQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
@@ -71,7 +67,6 @@ public class UserBudgetRepository extends BaseRepository {
             Object[] values = {budgetId};
             return readOne(insertQuery, new UserBudgetMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing SQL");
         }
     }
