@@ -1,14 +1,13 @@
 package com.cost.crafter.service;
 
 import com.cost.crafter.dal.TransactionRepository;
-import com.cost.crafter.dal.UserExpensesCategoryRepository;
 import com.cost.crafter.dto.Transaction;
-import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.enums.TransactionType;
 import com.mysql.cj.util.StringUtils;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,11 +34,11 @@ public class TransactionService {
             return false;
         }
 
-        final Date currentDate = new Date();
+        final Date createdDate = new Date();
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, 0,
-                TransactionType.CREDIT.toString(), transactionAmount, description, currentDate, currentDate ,
-                currentDate, true));
+                TransactionType.CREDIT.toString(), transactionAmount, description, null, createdDate, createdDate,
+                createdDate, true));
         return true;
     }
 
@@ -73,9 +72,50 @@ public class TransactionService {
 
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId,
-                TransactionType.DEBIT.toString(), transactionAmount, description, dateFormatter.parse(transactionDate), createdDate,
+                TransactionType.DEBIT.toString(), transactionAmount, description, null, dateFormatter.parse(transactionDate), createdDate,
                 createdDate, true));
         return true;
+    }
+
+    public boolean addExpenseRecurringTransaction(Integer userId, Date transactionDate, Integer expensesCategoryId,
+                                         Double transactionAmount, String description, Boolean isRecurring, String recurrenceType, Date recurrenceUpto) throws Exception {
+
+        List<Transaction> transactions = new ArrayList<>();
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(transactionDate);
+
+        while (!cal.getTime().after(recurrenceUpto)) {
+            Date currentTransactionDate = cal.getTime();
+            transactions.add(new Transaction(userId, expensesCategoryId, TransactionType.DEBIT.toString(), transactionAmount,
+                    description, recurrenceType, currentTransactionDate, new Date(), new Date(), true));
+            advanceDate(cal, recurrenceType);
+        }
+
+        transactionRepository = new TransactionRepository();
+        if(transactions != null){
+            transactionRepository.insertBatchTransaction(transactions);
+        }
+        return true;
+    }
+
+    private void advanceDate(Calendar calendar, String recurrenceType) {
+        switch (recurrenceType.toUpperCase()) {
+            case "D":
+                calendar.add(Calendar.DATE, 1);
+                break;
+            case "W":
+                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                break;
+            case "M":
+                calendar.add(Calendar.MONTH, 1);
+                break;
+            case "Y":
+                calendar.add(Calendar.YEAR, 1);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid recurrence type");
+        }
     }
 
     public List<Transaction> fetchTransactions(Integer userId, String transactionType) throws Exception{

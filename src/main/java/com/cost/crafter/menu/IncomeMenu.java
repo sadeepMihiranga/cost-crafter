@@ -56,9 +56,8 @@ public class IncomeMenu extends BaseMenuHandler{
             TransactionService transactionService = new TransactionService();
             transactionService.addIncomeTransaction(loggedUser().getUserId(), Double.parseDouble(incomeAmount), description);
 
-            System.out.println("Income transaction added successfully!");
+            showSuccessMessage("Income transaction added successfully!");
         } catch (Exception e) {
-            e.printStackTrace();
             showErrorMessage("Error creating income transaction");
         }
     }

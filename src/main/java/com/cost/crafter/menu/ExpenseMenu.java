@@ -1,23 +1,18 @@
 package com.cost.crafter.menu;
 
-import com.cost.crafter.dal.TransactionRepository;
 import com.cost.crafter.dto.Transaction;
 import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.enums.TransactionType;
 import com.cost.crafter.service.TransactionService;
 import com.cost.crafter.service.UserExpensesCategoryService;
 import de.vandermeer.asciitable.AsciiTable;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 public class ExpenseMenu extends BaseMenuHandler {
@@ -57,18 +52,41 @@ public class ExpenseMenu extends BaseMenuHandler {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        List<Integer> incomeTransList = null;
+        List<Integer> expenseTransLis = null;
         try {
             showMenuHeader("\nExpense Transactions\n");
 
             int selectedOption = 0;
             int maxIncomeTransId = 0;
             int exitOptionId = 0;
-            incomeTransList = new ArrayList<>();
+            expenseTransLis = new ArrayList<>();
 
             do {
                 System.out.println("To update choose a Expense transaction by id,\n");
-                System.out.println(renderedDataTable());
+
+                AsciiTable asciiTable = null;
+                TransactionService transactionService = new TransactionService();
+
+                try{
+                    expenseTransLis = new ArrayList<>();
+
+                    List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.DEBIT.toString());
+
+                    asciiTable = initTable("Transaction Id", "Transaction Date", "Expense Category", "Description", "Amount", "Created Date", "Updated Date");
+                    for (Transaction transaction : userIncomeTransactions) {
+                        addTableRow(asciiTable, transaction.getTransactionId(), transaction.getTransactionDate(), transaction.getExpensesCategory(), transaction.getDescription(), transaction.getTransactionAmount(),  transaction.getCreatedDate()
+                                , transaction.getUpdatedDate());
+
+                        if (maxIncomeTransId < transaction.getTransactionId()) {
+                            maxIncomeTransId = transaction.getTransactionId();
+                        }
+                        expenseTransLis.add(transaction.getTransactionId());
+                    }
+                } catch (Exception e){
+                    showErrorMessage("Error occurred while displaying Data table.");
+                }
+
+                System.out.println(asciiTable.render());
                 System.out.println("\nOr choose a menu option");
 
                 final int mainMenuOptionId = maxIncomeTransId + 1;
@@ -81,7 +99,7 @@ public class ExpenseMenu extends BaseMenuHandler {
                 System.out.print("Select an option : ");
                 selectedOption = intSelectedOption(br, exitOptionId+1);
 
-                if (incomeTransList.contains(selectedOption)) {
+                if (expenseTransLis.contains(selectedOption)) {
                     updateExpenseTransaction(selectedOption);
                 } else if (selectedOption == mainMenuOptionId) {
                     goToMainMenu();
@@ -94,18 +112,18 @@ public class ExpenseMenu extends BaseMenuHandler {
         } catch (Exception exception) {
             showErrorMessage("Error occurred! Please try again.");
         } finally {
-            incomeTransList = null;
+            expenseTransLis = null;
         }
     }
 
     private String renderedDataTable() throws Exception {
         AsciiTable asciiTable = null;
-        List<Integer> incomeTransList = null;
+        List<Integer> expenseTransLis = null;
         TransactionService transactionService = new TransactionService();
 
         try{
             int maxIncomeTransId = 0;
-            incomeTransList = new ArrayList<>();
+            expenseTransLis = new ArrayList<>();
 
             List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.DEBIT.toString());
 
@@ -117,7 +135,7 @@ public class ExpenseMenu extends BaseMenuHandler {
                 if (maxIncomeTransId < transaction.getTransactionId()) {
                     maxIncomeTransId = transaction.getTransactionId();
                 }
-                incomeTransList.add(transaction.getTransactionId());
+                expenseTransLis.add(transaction.getTransactionId());
             }
         } catch (Exception e){
             showErrorMessage("Error occurred while displaying Data table.");
@@ -251,6 +269,7 @@ public class ExpenseMenu extends BaseMenuHandler {
 
         ExpensesCategoriesMenu expensesCategoriesMenu = new ExpensesCategoriesMenu();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        TransactionService transactionService = new TransactionService();
 
         try {
             expensesCategoriesMenu.viewExpenseCategories();
@@ -266,13 +285,47 @@ public class ExpenseMenu extends BaseMenuHandler {
             System.out.print("Enter Expense amount: ");
             String expenseAmount = br.readLine();
 
-            System.out.print("Enter income description: ");
+            System.out.print("Enter Expense description: ");
             String description = br.readLine();
 
-            TransactionService transactionService = new TransactionService();
-            transactionService.addExpenseTransaction(loggedUser().getUserId(), expenseDate, Integer.parseInt(expenseCategoryId), Double.parseDouble(expenseAmount),description);
+            System.out.print("Is this a recurring expense? (Y/N): ");
+            String isRecurring = br.readLine().toUpperCase();
 
-            showSuccessMessage("Expense transaction added successfully!");
+            if (isRecurring.equals("Y")) {
+                System.out.print("Enter Recurrence Type (D-DAILY, W-WEEKLY, M-MONTHLY, Y-YEARLY): ");
+                String recurrenceType = br.readLine().toUpperCase();
+                String[] recurringTypes =  {"D", "W", "M", "Y"};
+                boolean isValidRecurringType = Arrays.asList(recurringTypes).contains(recurrenceType);
+
+                if (isValidRecurringType){
+                    System.out.print("Enter Recurrence End Date (yyyy-MM-dd): ");
+                    String recurrenceEndDate = br.readLine();
+
+                    DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
+                    try{
+                        transactionService.addExpenseRecurringTransaction(loggedUser().getUserId(), dateFormatter.parse(expenseDate), Integer.parseInt(expenseCategoryId),
+                                Double.parseDouble(expenseAmount), description, true, recurrenceType, dateFormatter.parse(recurrenceEndDate));
+                        showSuccessMessage("Recurring Expense transaction added successfully!");
+
+                    } catch (ParseException e) {
+                        showErrorMessage("Invalid Date input. Please try again.");
+                        createExpenseTransaction();
+                    }
+
+                } else {
+                    showErrorMessage("Invalid Recurring type. Please try again.");
+                    createExpenseTransaction();
+                }
+
+            } else if (isRecurring.equals("N")) {
+                transactionService.addExpenseTransaction(loggedUser().getUserId(), expenseDate, Integer.parseInt(expenseCategoryId), Double.parseDouble(expenseAmount),description);
+                showSuccessMessage("Expense transaction added successfully!");
+            } else {
+                showErrorMessage("Invalid Input. Please try again with Y or N.");
+                createExpenseTransaction();
+            }
+
         } catch (Exception e) {
             showErrorMessage("Error occurred while creating Expense transaction");
         }

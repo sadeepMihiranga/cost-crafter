@@ -10,10 +10,12 @@ public class ExpensesCategoryMapper implements BaseRepository.RowMapper<Expenses
 
     @Override
     public ExpensesCategory mapRow(ResultSet resultSet) throws SQLException {
+
         ExpensesCategory expensesCategory = new ExpensesCategory();
         expensesCategory.setId(resultSet.getLong("category_id"));
         expensesCategory.setName(resultSet.getString("name"));
         expensesCategory.setDescription(resultSet.getString("description"));
+
         return expensesCategory;
     }
 }
