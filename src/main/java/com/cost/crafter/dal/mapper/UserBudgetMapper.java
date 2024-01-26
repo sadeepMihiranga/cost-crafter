@@ -10,18 +10,16 @@ public class UserBudgetMapper implements BaseRepository.RowMapper<UserBudget> {
 
     @Override
     public UserBudget mapRow(ResultSet resultSet) throws SQLException {
-        UserBudget userBudget = new UserBudget();
 
+        UserBudget userBudget = new UserBudget();
         userBudget.setUserBudgetId(resultSet.getInt("user_budget_id"));
         userBudget.setUserId(resultSet.getInt("user_id"));
         userBudget.setExpenseCategoryId(resultSet.getInt("expenses_category_id"));
         userBudget.setMonth(resultSet.getString("month"));
         userBudget.setBudgetAmount(resultSet.getDouble("budget_amount"));
-
         if (BaseRepository.RowMapper.columnExists(resultSet, "name")) {
             userBudget.setExpenseCategoryName(resultSet.getString("name"));
         }
-
         return userBudget;
     }
 

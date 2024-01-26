@@ -34,16 +34,16 @@ public class TransactionService {
             return false;
         }
 
-        final Date createdDate = new Date();
+        final Date currentDate = new Date();
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, 0,
-                TransactionType.CREDIT.toString(), transactionAmount, description, null, createdDate, createdDate,
-                createdDate, true));
+                TransactionType.CREDIT.toString(), transactionAmount, description, null, currentDate, currentDate,
+                currentDate, true));
         return true;
     }
 
-    public boolean addExpenseTransaction (Integer userId, String transactionDate, Integer expensesCategoryId, Double transactionAmount,
-                                          String description) throws Exception {
+    public boolean addExpenseTransaction(Integer userId, String transactionDate, Integer expensesCategoryId,
+                                         Double transactionAmount, String description) throws Exception {
         System.out.println("\n Adding Expense...");
 
         if (userId == null) {
@@ -67,19 +67,19 @@ public class TransactionService {
         // TODO : if not insert transaction date, then we cannot map budget with expenses. coz there are no attribute
         //        to map month in budget entity with transaction entity
 
-        Date createdDate = new Date();
+        final Date currentDate = new Date();
         DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, expensesCategoryId,
-                TransactionType.DEBIT.toString(), transactionAmount, description, null, dateFormatter.parse(transactionDate), createdDate,
-                createdDate, true));
+                TransactionType.DEBIT.toString(), transactionAmount, description, null, dateFormatter.parse(transactionDate),
+                currentDate, currentDate, true));
         return true;
     }
 
     public boolean addExpenseRecurringTransaction(Integer userId, Date transactionDate, Integer expensesCategoryId,
-                                         Double transactionAmount, String description, Boolean isRecurring, String recurrenceType, Date recurrenceUpto) throws Exception {
-
+                                                  Double transactionAmount, String description, String recurrenceType,
+                                                  Date recurrenceUpto) throws Exception {
         List<Transaction> transactions = new ArrayList<>();
 
         Calendar cal = Calendar.getInstance();
@@ -91,7 +91,6 @@ public class TransactionService {
                     description, recurrenceType, currentTransactionDate, new Date(), new Date(), true));
             advanceDate(cal, recurrenceType);
         }
-
         transactionRepository = new TransactionRepository();
         if(transactions != null){
             transactionRepository.insertBatchTransaction(transactions);

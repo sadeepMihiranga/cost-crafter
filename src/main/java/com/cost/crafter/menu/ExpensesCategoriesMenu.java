@@ -1,15 +1,13 @@
 package com.cost.crafter.menu;
 
-import com.cost.crafter.dto.User;
 import com.cost.crafter.dto.UserExpensesCategory;
 import com.cost.crafter.service.UserExpensesCategoryService;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.InputStreamReader;
 import java.util.List;
 
-public class ExpensesCategoriesMenu  extends BaseMenuHandler{
+public class ExpensesCategoriesMenu  extends BaseMenuHandler {
 
     private UserExpensesCategoryService userExpensesCategoryService = null;
 
@@ -40,7 +38,6 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 }
             } while (selectedOption != 5);
         } catch (Exception exception) {
-//            exception.printStackTrace();
         }
     }
 
@@ -68,7 +65,6 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
 
             System.out.println("Expense category created successfully!");
         } catch (Exception e) {
-//            e.printStackTrace();
             showErrorMessage("Error creating expense category");
         }
     }
@@ -92,7 +88,6 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 System.out.println("---------------------------");
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             showErrorMessage("Error fetching expense categories");
         }
     }
@@ -135,7 +130,6 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
                 showErrorMessage("Category not found with the given ID");
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             showErrorMessage("Error updating expense category");
         }
     }
@@ -161,7 +155,6 @@ public class ExpensesCategoriesMenu  extends BaseMenuHandler{
 
             System.out.println("Expense category deleted successfully!");
         } catch (Exception e) {
-//            e.printStackTrace();
             showErrorMessage("Error deleting expense category");
         }
     }

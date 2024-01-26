@@ -16,7 +16,6 @@ public class UserExpensesCategoryMapper implements BaseRepository.RowMapper<User
         userExpensesCategory.setExpensesCategoryId(resultSet.getInt("expenses_category_id"));
         userExpensesCategory.setName(resultSet.getString("name"));
         userExpensesCategory.setDescription(resultSet.getString("description"));
-
         return userExpensesCategory;
     }
 }

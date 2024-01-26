@@ -16,14 +16,13 @@ public class GenerateReportService {
     public List<GenerateReport> fetchMonthlyReportData(Integer userId, String userInputMonth) throws Exception {
         if (userId == null) {
             throw new Exception("User id is required");
-        }else if(userInputMonth == null){
+        } else if(userInputMonth == null) {
             throw new Exception("User input month is required");
         }
         try {
             generateReportRepository = new GenerateReportRepository();
             return generateReportRepository.fetchMonthlyReportData(userId, userInputMonth);
         } catch (Exception e) {
-//            e.printStackTrace();
             throw new Exception("Error while fetching report data");
         } finally {
             generateReportRepository = null;
@@ -38,7 +37,6 @@ public class GenerateReportService {
             generateReportRepository = new GenerateReportRepository();
             return generateReportRepository.fetchSixMonthReportData(userId);
         } catch (Exception e) {
-//            e.printStackTrace();
             throw new Exception("Error while fetching report data");
         } finally {
             generateReportRepository = null;
