@@ -20,7 +20,6 @@ public class TransactionMapper implements BaseRepository.RowMapper<Transaction> 
         transaction.setDescription(resultSet.getString("description"));
         transaction.setIsRecurring(resultSet.getBoolean("is_recurring"));
         transaction.setRecurrenceType(resultSet.getString("recurrence_type"));
-        transaction.setRecurrenceUpto(resultSet.getInt("recurrence_upto"));
         transaction.setTransactionDate(resultSet.getDate("transaction_date"));
         transaction.setCreatedDate(resultSet.getDate("created_date"));
         transaction.setUpdatedDate(resultSet.getDate("updated_date"));

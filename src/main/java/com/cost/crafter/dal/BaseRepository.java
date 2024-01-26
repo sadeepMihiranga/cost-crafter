@@ -1,6 +1,7 @@
 package com.cost.crafter.dal;
 
 import com.cost.crafter.config.DbConnectionManager;
+import com.cost.crafter.dto.Transaction;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -42,6 +43,55 @@ public class BaseRepository {
             e.printStackTrace();
             throw new Exception(e.getMessage());
         }
+    }
+
+    protected int batchCreate(String insertQuery, List<Transaction> transactions) throws Exception {
+
+        int[] insertCount;
+        Connection connection = connectionManager.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+
+        try {
+            connection.setAutoCommit(false); // Start transaction
+
+            for (Transaction transaction : transactions) {
+                preparedStatement.setInt(1, transaction.getUserId());
+                preparedStatement.setInt(2, transaction.getExpensesCategoryId());
+                preparedStatement.setString(3, transaction.getTransactionType());
+                preparedStatement.setDouble(4, transaction.getTransactionAmount());
+                preparedStatement.setString(5, transaction.getDescription());
+                preparedStatement.setBoolean(6, true);
+                preparedStatement.setString(7, transaction.getRecurrenceType());
+                preparedStatement.setInt(8, 0);
+                preparedStatement.setDate(9, new Date(transaction.getTransactionDate().getTime()));
+                preparedStatement.setTimestamp(10, new Timestamp(transaction.getCreatedDate().getTime()));
+                preparedStatement.setTimestamp(11, new Timestamp(transaction.getUpdatedDate().getTime()));
+                preparedStatement.setBoolean(12, transaction.getStatus());
+                preparedStatement.addBatch();
+            }
+
+            insertCount = preparedStatement.executeBatch();
+            connection.commit();
+
+        } catch (SQLException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback(); // Rollback in case of an error
+                } catch (SQLException ex) {
+                    throw new Exception("Error executing batch insert for transactions", e);
+                }
+            }
+            throw new Exception("Error executing batch insert for transactions", e);
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.setAutoCommit(true);
+                connection.close();
+            }
+        }
+        return insertCount.length;
     }
 
     // Read operation
