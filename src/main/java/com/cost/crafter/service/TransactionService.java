@@ -18,10 +18,9 @@ public class TransactionService {
 
     private TransactionRepository  transactionRepository = null;
 
-    public boolean addIncomeTransaction (Integer userId, Double transactionAmount, String description) throws Exception {
-        System.out.println("\n Adding Income...");
+    public boolean addIncomeTransaction(Integer userId, Double transactionAmount, String description) throws Exception {
 
-        //input validations for income entry
+        // input validations for income entry
         if (userId == null) {
             System.out.println(ANSI_RED + "\nUser id is required" + ANSI_RESET);
             return false;
@@ -35,9 +34,7 @@ public class TransactionService {
             return false;
         }
 
-        // TODO : need to ask for the transaction date if we manage backdated incomes
-
-        Date createdDate = new Date();
+        final Date createdDate = new Date();
         transactionRepository = new TransactionRepository();
         transactionRepository.insertTransaction(new Transaction(userId, 0,
                 TransactionType.CREDIT.toString(), transactionAmount, description, null, createdDate, createdDate,
@@ -101,7 +98,6 @@ public class TransactionService {
         }
         return true;
     }
-
 
     private void advanceDate(Calendar calendar, String recurrenceType) {
         switch (recurrenceType.toUpperCase()) {
