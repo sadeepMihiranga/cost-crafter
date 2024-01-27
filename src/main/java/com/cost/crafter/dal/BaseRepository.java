@@ -62,11 +62,10 @@ public class BaseRepository {
                 preparedStatement.setString(5, transaction.getDescription());
                 preparedStatement.setBoolean(6, true);
                 preparedStatement.setString(7, transaction.getRecurrenceType());
-                preparedStatement.setInt(8, 0);
-                preparedStatement.setDate(9, new Date(transaction.getTransactionDate().getTime()));
-                preparedStatement.setTimestamp(10, new Timestamp(transaction.getCreatedDate().getTime()));
-                preparedStatement.setTimestamp(11, new Timestamp(transaction.getUpdatedDate().getTime()));
-                preparedStatement.setBoolean(12, transaction.getStatus());
+                preparedStatement.setDate(8, new Date(transaction.getTransactionDate().getTime()));
+                preparedStatement.setTimestamp(9, new Timestamp(transaction.getCreatedDate().getTime()));
+                preparedStatement.setTimestamp(10, new Timestamp(transaction.getUpdatedDate().getTime()));
+                preparedStatement.setBoolean(11, transaction.getStatus());
                 preparedStatement.addBatch();
             }
 
