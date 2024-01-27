@@ -28,7 +28,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 default -> showErrorMessage("Invalid option! Please try again.");
             }
         } catch (Exception exception) {
-//            exception.printStackTrace();
+            showErrorMessage("Error while processing.");
         }
     }
 
@@ -40,7 +40,7 @@ public class GenerateReportMenu extends BaseMenuHandler {
 
             String[] parts = inputMonth.split("-");
             if (parts.length != 2 || inputMonth.length() != 7) {
-                System.out.print("Invalid Date format");
+                showErrorMessage("Invalid Date format");
             }
 
             int selectedYear = Integer.parseInt(parts[0]);
@@ -50,22 +50,26 @@ public class GenerateReportMenu extends BaseMenuHandler {
             List<GenerateReport> reportData = generateReportService.fetchMonthlyReportData(loggedUser().getUserId(), inputMonth);
 
             if (reportData.isEmpty()) {
-                System.out.println("No data found for the selected month.");
+                showErrorMessage("No data found for the selected month.");
                 return;
             }
 
             int selectedMonthNum = Integer.parseInt(parts[1], 10);
-            String monthInText = MonthConverter(selectedMonthNum);
+            final String monthInText = monthConverter(selectedMonthNum);
+
+            if (monthInText == null) {
+                generateMonthlyTransactionSummary();
+            }
+
             System.out.println("Report Data for " + monthInText);
             for (GenerateReport reportDetails : reportData) {
-                System.out.println("---------------------------");
+                System.out.println("\n---------------------------");
                 System.out.println("Category Name: " + reportDetails.getCategoryName());
                 System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
         } catch (Exception e) {
-//            e.printStackTrace();
-            showErrorMessage("Error reading input");
+            showErrorMessage("Error while generating the report");
         }
     }
 
@@ -75,11 +79,11 @@ public class GenerateReportMenu extends BaseMenuHandler {
             List<GenerateReport> sixMonthReportData = generateReportService.fetchSixMonthReportData(loggedUser().getUserId());
 
             if (sixMonthReportData.isEmpty()) {
-                System.out.println("No data found for the past 6 months.");
+                showErrorMessage("No data found for the past 6 months.");
                 return;
             }
 
-            System.out.println("Report Data for past 6 months");
+            System.out.println("Report Data for past 6 months\n");
             for (GenerateReport reportDetails : sixMonthReportData) {
                 System.out.println("---------------------------");
                 System.out.println("Category Name: " + reportDetails.getCategoryName());
@@ -87,25 +91,21 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             showErrorMessage("Error reading input");
         }
     }
 
-    public static String MonthConverter(int selectedMonthNumber) {
-        String[] monthNames = {
-                "January", "February", "March", "April",
-                "May", "June", "July", "August",
-                "September", "October", "November", "December"
-        };
+    public String monthConverter(int selectedMonthNumber) {
+        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September",
+                "October", "November", "December"};
 
-        // Check if the dateNumber is within the valid range
+        // check if the dateNumber is within the valid range
         if (selectedMonthNumber >= 1 && selectedMonthNumber <= 12) {
-            // Convert the numeric month to its text representation
+            // convert the numeric month to its text representation
             return monthNames[selectedMonthNumber - 1];
         } else {
-            // Return an error message for invalid month value
-            return "Invalid month value. Please provide a value between 1 and 12.";
+            showErrorMessage("Invalid month value. Please provide a value between 1 and 12.");
+            return null;
         }
     }
 }

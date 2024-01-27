@@ -20,9 +20,7 @@ public class ExpenseMenu extends BaseMenuHandler {
     public void showExpenseTransactionsMenu() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
-
             showMenuHeader("Expense Transactions Menu");
-
             int selectedOption = 0;
             do {
                 System.out.println("-------------------------------------\n");
@@ -49,18 +47,15 @@ public class ExpenseMenu extends BaseMenuHandler {
     }
 
     private void viewAllExpenseTransactions() {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
         List<Integer> expenseTransLis = null;
+
         try {
             showMenuHeader("\nExpense Transactions\n");
 
             int selectedOption = 0;
             int maxIncomeTransId = 0;
             int exitOptionId = 0;
-            expenseTransLis = new ArrayList<>();
-
             do {
                 System.out.println("To update choose a Expense transaction by id,\n");
 
@@ -70,12 +65,16 @@ public class ExpenseMenu extends BaseMenuHandler {
                 try{
                     expenseTransLis = new ArrayList<>();
 
-                    List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.DEBIT.toString());
+                    List<Transaction> userIncomeTransactions = transactionService
+                            .fetchTransactions(loggedUser().getUserId(), TransactionType.DEBIT.toString());
 
-                    asciiTable = initTable("Transaction Id", "Transaction Date", "Expense Category", "Description", "Amount", "Created Date", "Updated Date");
+                    asciiTable = initTable("Transaction Id", "Transaction Date", "Expense Category", "Description",
+                            "Amount", "Created Date", "Updated Date");
+
                     for (Transaction transaction : userIncomeTransactions) {
-                        addTableRow(asciiTable, transaction.getTransactionId(), transaction.getTransactionDate(), transaction.getExpensesCategory(), transaction.getDescription(), transaction.getTransactionAmount(),  transaction.getCreatedDate()
-                                , transaction.getUpdatedDate());
+                        addTableRow(asciiTable, transaction.getTransactionId(), transaction.getTransactionDate(),
+                                transaction.getExpensesCategory(), transaction.getDescription(), transaction.getTransactionAmount(),
+                                transaction.getCreatedDate(), transaction.getUpdatedDate());
 
                         if (maxIncomeTransId < transaction.getTransactionId()) {
                             maxIncomeTransId = transaction.getTransactionId();
@@ -116,7 +115,7 @@ public class ExpenseMenu extends BaseMenuHandler {
         }
     }
 
-    private String renderedDataTable() throws Exception {
+    private String renderedDataTable() {
         AsciiTable asciiTable = null;
         List<Integer> expenseTransLis = null;
         TransactionService transactionService = new TransactionService();
@@ -125,12 +124,15 @@ public class ExpenseMenu extends BaseMenuHandler {
             int maxIncomeTransId = 0;
             expenseTransLis = new ArrayList<>();
 
-            List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(), TransactionType.DEBIT.toString());
+            List<Transaction> userIncomeTransactions = transactionService.fetchTransactions(loggedUser().getUserId(),
+                    TransactionType.DEBIT.toString());
 
-            asciiTable = initTable("Transaction Id", "Transaction Date", "Expense Category", "Description", "Amount", "Created Date", "Updated Date");
+            asciiTable = initTable("Transaction Id", "Transaction Date", "Expense Category", "Description",
+                    "Amount", "Created Date", "Updated Date");
             for (Transaction transaction : userIncomeTransactions) {
-                addTableRow(asciiTable, transaction.getTransactionId(), transaction.getTransactionDate(), transaction.getExpensesCategory(), transaction.getDescription(), transaction.getTransactionAmount(),  transaction.getCreatedDate()
-                        , transaction.getUpdatedDate());
+                addTableRow(asciiTable, transaction.getTransactionId(), transaction.getTransactionDate(),
+                        transaction.getExpensesCategory(), transaction.getDescription(), transaction.getTransactionAmount(),
+                        transaction.getCreatedDate(), transaction.getUpdatedDate());
 
                 if (maxIncomeTransId < transaction.getTransactionId()) {
                     maxIncomeTransId = transaction.getTransactionId();
@@ -143,7 +145,7 @@ public class ExpenseMenu extends BaseMenuHandler {
         return asciiTable.render();
     }
 
-    private void updateExpenseTransaction(Integer transactionId){
+    private void updateExpenseTransaction(Integer transactionId) {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         TransactionService transactionService = new TransactionService();
 
@@ -208,7 +210,7 @@ public class ExpenseMenu extends BaseMenuHandler {
                     UserExpensesCategoryService userExpensesCategoryService = new UserExpensesCategoryService();
                     UserExpensesCategory category = userExpensesCategoryService.fetchUserExpensesCategory(existingCategory);
 
-                    if(category == null){
+                    if(category == null) {
                         showErrorMessage("Invalid Expense Category ID! Please try again.");
                         updateExpenseTransaction(transactionId);
                     }
@@ -266,7 +268,6 @@ public class ExpenseMenu extends BaseMenuHandler {
     }
 
     private void createExpenseTransaction() {
-
         ExpensesCategoriesMenu expensesCategoriesMenu = new ExpensesCategoriesMenu();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         TransactionService transactionService = new TransactionService();
@@ -299,40 +300,36 @@ public class ExpenseMenu extends BaseMenuHandler {
 
                 if (isValidRecurringType){
                     System.out.print("Enter Recurrence End Date (yyyy-MM-dd): ");
-                    String recurrenceEndDate = br.readLine();
+                    final String recurrenceEndDate = br.readLine();
 
                     DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
-                    try{
-                        transactionService.addExpenseRecurringTransaction(loggedUser().getUserId(), dateFormatter.parse(expenseDate), Integer.parseInt(expenseCategoryId),
-                                Double.parseDouble(expenseAmount), description, true, recurrenceType, dateFormatter.parse(recurrenceEndDate));
+                    try {
+                        transactionService.addExpenseRecurringTransaction(loggedUser().getUserId(), dateFormatter.parse(expenseDate),
+                                Integer.parseInt(expenseCategoryId), Double.parseDouble(expenseAmount), description,
+                                recurrenceType, dateFormatter.parse(recurrenceEndDate));
                         showSuccessMessage("Recurring Expense transaction added successfully!");
-
                     } catch (ParseException e) {
                         showErrorMessage("Invalid Date input. Please try again.");
                         createExpenseTransaction();
                     }
-
                 } else {
                     showErrorMessage("Invalid Recurring type. Please try again.");
                     createExpenseTransaction();
                 }
-
             } else if (isRecurring.equals("N")) {
-                transactionService.addExpenseTransaction(loggedUser().getUserId(), expenseDate, Integer.parseInt(expenseCategoryId), Double.parseDouble(expenseAmount),description);
+                transactionService.addExpenseTransaction(loggedUser().getUserId(), expenseDate, Integer.parseInt(expenseCategoryId),
+                        Double.parseDouble(expenseAmount),description);
                 showSuccessMessage("Expense transaction added successfully!");
             } else {
                 showErrorMessage("Invalid Input. Please try again with Y or N.");
                 createExpenseTransaction();
             }
-
         } catch (Exception e) {
             showErrorMessage("Error occurred while creating Expense transaction");
         }
     }
 
-    private void deleteExpenseTransactions() throws Exception {
-
+    private void deleteExpenseTransactions() {
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             TransactionService transactionService = new TransactionService();
@@ -340,9 +337,7 @@ public class ExpenseMenu extends BaseMenuHandler {
             showMenuHeader("\nDelete Expense Transaction\n");
 
             System.out.println(renderedDataTable());
-
             System.out.println("0 - Main Menu,\n");
-
             System.out.println("To Delete choose a Expense transaction ID,\n");
 
             int transactionId = 0;
@@ -353,7 +348,7 @@ public class ExpenseMenu extends BaseMenuHandler {
                 deleteExpenseTransactions();
             }
 
-            if (transactionId == 0){
+            if (transactionId == 0) {
                 goToMainMenu();
                 return;
             }
@@ -367,7 +362,7 @@ public class ExpenseMenu extends BaseMenuHandler {
             transactionService.deleteTransaction(transactionId);
 
             showSuccessMessage("Expense Transaction deleted successfully");
-        } catch (Exception e){
+        } catch (Exception e) {
             showErrorMessage("Error occurred whileE deleting Expense Transaction");
         }
     }

@@ -20,7 +20,6 @@ public class UserRepository extends BaseRepository {
                     user.getEmail(), user.getDateOfBirth(), null};
             return create(insertQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while executing user insert SQL");
         }
     }
@@ -32,7 +31,6 @@ public class UserRepository extends BaseRepository {
             Object[] values = {username};
             return readOne(readQuery, new UserMapper(), values);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception("Error while executing user login SQL");
         }
     }

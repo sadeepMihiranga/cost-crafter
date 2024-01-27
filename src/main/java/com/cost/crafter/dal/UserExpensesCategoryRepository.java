@@ -21,8 +21,7 @@ public class UserExpensesCategoryRepository extends BaseRepository {
                     userExpensesCategory.getDescription()};
             create(insertQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Error while executing SQL");
+            throw new Exception("Error while inserting expense categories");
         }
     }
     public List<UserExpensesCategory> fetchAllCategories(Integer userId) throws Exception {
@@ -31,8 +30,7 @@ public class UserExpensesCategoryRepository extends BaseRepository {
             Object[] values = {userId};
             return read(insertQuery, new UserExpensesCategoryMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Error while executing SQL");
+            throw new Exception("Error while fetching all expense categories");
         }
     }
 
@@ -42,7 +40,6 @@ public class UserExpensesCategoryRepository extends BaseRepository {
             Object[] values = {categoryToDelete.getUserId(), categoryToDelete.getExpensesCategoryId()};
             delete(deleteQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while deleting user expenses category");
         }
     }
@@ -55,7 +52,6 @@ public class UserExpensesCategoryRepository extends BaseRepository {
                     existingCategory.getUserId(), existingCategory.getExpensesCategoryId()};
             update(updateQuery, values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while updating user expenses category");
         }
     }
@@ -67,7 +63,6 @@ public class UserExpensesCategoryRepository extends BaseRepository {
 
             return readOne(selectQuery, new UserExpensesCategoryMapper(), values);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("Error while fetching user expenses category");
         }
     }

@@ -40,7 +40,6 @@ public class BaseRepository {
             }
             return createdId;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
     }
@@ -117,7 +116,6 @@ public class BaseRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
 
@@ -149,7 +147,6 @@ public class BaseRepository {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new Exception(e.getMessage());
         }
 
