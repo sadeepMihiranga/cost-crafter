@@ -3,6 +3,7 @@ package com.cost.crafter.menu;
 import com.cost.crafter.dal.GenerateReportRepository;
 import com.cost.crafter.dto.GenerateReport;
 import com.cost.crafter.service.GenerateReportService;
+import de.vandermeer.asciitable.AsciiTable;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -43,9 +44,6 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 showErrorMessage("Invalid Date format");
             }
 
-            int selectedYear = Integer.parseInt(parts[0]);
-            int selectedMonth = Integer.parseInt(parts[1]);
-
             generateReportService = new GenerateReportService(new GenerateReportRepository());
             List<GenerateReport> reportData = generateReportService.fetchMonthlyReportData(loggedUser().getUserId(), inputMonth);
 
@@ -61,13 +59,16 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 generateMonthlyTransactionSummary();
             }
 
+            AsciiTable asciiTable = initTable("Category Name", "Budget Amount", "Actual Expense");
+
             System.out.println("Report Data for " + monthInText);
             for (GenerateReport reportDetails : reportData) {
-                System.out.println("\n---------------------------");
-                System.out.println("Category Name: " + reportDetails.getCategoryName());
-                System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
-                System.out.println("ActualExpense: " + reportDetails.getActualExpense());
+                addTableRow(asciiTable, reportDetails.getCategoryName(), reportDetails.getBudgetAmount(), reportDetails.getActualExpense());
+//                System.out.println("Category Name: " + reportDetails.getCategoryName());
+//                System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
+//                System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
+            System.out.println(asciiTable.render());
         } catch (Exception e) {
             showErrorMessage("Error while generating the report");
         }
@@ -83,13 +84,17 @@ public class GenerateReportMenu extends BaseMenuHandler {
                 return;
             }
 
+            AsciiTable asciiTable = initTable("Category Name", "Budget Amount", "Actual Expense");
+
             System.out.println("Report Data for past 6 months\n");
             for (GenerateReport reportDetails : sixMonthReportData) {
-                System.out.println("---------------------------");
-                System.out.println("Category Name: " + reportDetails.getCategoryName());
-                System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
-                System.out.println("ActualExpense: " + reportDetails.getActualExpense());
+                addTableRow(asciiTable, reportDetails.getCategoryName(), reportDetails.getBudgetAmount(), reportDetails.getActualExpense());
+//                System.out.println("Category Name: " + reportDetails.getCategoryName());
+//                System.out.println("BudgetAmount: " + reportDetails.getBudgetAmount());
+//                System.out.println("ActualExpense: " + reportDetails.getActualExpense());
             }
+
+            System.out.println(asciiTable.render());
         } catch (Exception e) {
             showErrorMessage("Error reading input");
         }
